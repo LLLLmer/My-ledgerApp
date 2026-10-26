@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#f4f7fc">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="随手记账">
-<title>随手记账 V1.5</title>
+<title>随手记账 V1.6</title>
 <style>
 :root{
  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
@@ -148,7 +148,7 @@ h3{font-size:16px;margin:0}
 <header>
 <div>
 <h1>✦ 随手记账</h1>
-<div class="muted">V1.5 · 多币种资产管理</div>
+<div class="muted">V1.6 · 流动资金与多币种资产</div>
 </div>
 <button class="outline" onclick="showPage('settings')">⚙️</button>
 </header>
@@ -166,7 +166,7 @@ h3{font-size:16px;margin:0}
 <strong id="homeIncome">¥0.00</strong>
 </div>
 <div>
-<span class="muted">本月消费 · 折人民币</span>
+<span class="muted">本月消费 · 流动资金扣款</span>
 <strong id="homeExpense">¥0.00</strong>
 </div>
 </div>
@@ -211,6 +211,7 @@ h3{font-size:16px;margin:0}
 单币种父级的子级自动继承币种；
 多币种父级允许各子级分别选择币种。
 资产金额显示原币，首页统一折算人民币。
+流动资金用于全部日常消费，可点击“设置余额”填写当前可用金额，也可通过资产流转转入。
 </p>
 <div id="assetList"></div>
 </section>
@@ -224,12 +225,25 @@ h3{font-size:16px;margin:0}
 <form id="entryForm">
 <div class="field">
 <label>金额（原币）</label>
-<input id="amount" type="number" min="0.01" step="0.01" inputmode="decimal" required>
+<input id="amount" type="number" min="0.01" step="0.01" inputmode="decimal" required oninput="updateFormCurrency(true)">
 </div>
 <div class="field"><label>分类</label><select id="category"></select></div>
 <div class="field"><label>资金归属账户</label>
 <select id="accountSelect" required onchange="updateFormCurrency()"></select></div>
-<div class="status" id="entryCurrency">选择账户后确定币种</div>
+<div class="field" id="expenseCurrencyField">
+<label>消费币种</label>
+<select id="expenseCurrency" onchange="updateFormCurrency(true)">
+<option value="CNY">人民币 CNY</option>
+<option value="USD">美元 USD</option>
+<option value="HKD">港币 HKD</option>
+</select>
+</div>
+<div class="field" id="cashDebitField" hidden>
+<label>实际扣款（人民币）</label>
+<input id="cashDebit" type="number" min="0.01" step="0.01" inputmode="decimal" oninput="updateFormCurrency()">
+<p class="hint">自动填入参考折算金额，可改为实际人民币扣款。原币账单金额会保留。</p>
+</div>
+<div class="status" id="entryCurrency">消费统一从流动资金扣款</div>
 <div class="field"><label>日期</label><input id="date" type="date" required></div>
 <div class="field"><label>备注</label>
 <textarea id="note" rows="2" maxlength="100"></textarea></div>
@@ -295,7 +309,7 @@ h3{font-size:16px;margin:0}
 <div class="two">
 <div><div class="muted">收入 · 参考人民币</div>
 <strong id="statIncome"></strong></div>
-<div><div class="muted">消费 · 参考人民币</div>
+<div><div class="muted">消费 · 人民币扣款</div>
 <strong id="statExpense"></strong></div>
 </div>
 </div>
@@ -304,7 +318,7 @@ h3{font-size:16px;margin:0}
 <button class="smallbtn" onclick="resetForm();showPage('add')">+ 记一笔</button>
 </div>
 <div id="allRecords"></div>
-<div class="section"><h3>消费分类 · 折人民币</h3></div>
+<div class="section"><h3>消费分类 · 人民币扣款</h3></div>
 <div class="card" id="breakdown"></div>
 </section>
 
@@ -381,6 +395,7 @@ const META_KEY="myLedgerCloudMetaV15";
 const PASSWORD_KEY="myLedgerRememberedSyncPasswordV12";
 const PRIVACY_KEY="ledgerAssetPrivacyV141";
 const RATES_KEY="myLedgerExchangeRatesV15";
+const CASH_ACCOUNT_ID="c7de8b30-d16a-4c00-9abc-000000000016";
 const CLOUD_URL="https://ledger-sync.l1154723176.workers.dev/ledger";
 const RATE_URL="https://api.frankfurter.dev/v2/rates?base=CNY&quotes=USD,HKD";
 const el=id=>document.getElementById(id);
@@ -456,7 +471,9 @@ function migrateLocal(){
  });
 
  records=records.map(r=>({
-  ...r,currency:map.get(r.accountId)||r.currency||"CNY"
+  ...r,currency:r.kind==="expense"&&r.accountId===CASH_ACCOUNT_ID?
+   (CC.includes(r.currency)?r.currency:"CNY"):
+   (map.get(r.accountId)||r.currency||"CNY")
  }));
 
  movements=movements.map(m=>
@@ -464,8 +481,71 @@ function migrateLocal(){
    {...m,toCents:m.toCents??m.cents}:
    {...m}
  );
+ ensureCashAccount();
+ migrateExpensesToCash();
 }
-migrateLocal();
+
+function ensureCashAccount(){
+ if(!accounts.some(a=>a.id===CASH_ACCOUNT_ID)){
+  accounts.unshift({
+   id:CASH_ACCOUNT_ID,name:"流动资金",mode:"single",
+   currency:"CNY",openingCents:0,children:[]
+  });
+ }
+}
+
+// 保留原币金额；人民币扣款一经记录，后续汇率更新不会改写。
+function expenseDebit(record){
+ if(record.currency==="CNY")return record.cents;
+ return Number.isSafeInteger(record.cashDebitCents)&&record.cashDebitCents>=0?
+  record.cashDebitCents:null;
+}
+
+function migrateExpensesToCash(){
+ let changed=false;
+ records=records.map(record=>{
+  if(record.kind!=="expense")return record;
+  const next={...record};
+  if(next.accountId!==CASH_ACCOUNT_ID){
+   next.previousAccountId=next.accountId||null;
+   next.accountId=CASH_ACCOUNT_ID;
+   changed=true;
+  }
+  if(expenseDebit(next)===null){
+   const converted=yuan(next.cents,next.currency);
+   if(converted!==null&&Number.isSafeInteger(Math.round(converted))){
+    next.cashDebitCents=Math.round(converted);
+    changed=true;
+   }
+  }else if(next.currency==="CNY"&&next.cashDebitCents!==next.cents){
+   next.cashDebitCents=next.cents;
+   changed=true;
+  }
+  return next;
+ });
+ return changed;
+}
+
+function setCashBalance(){
+ const account=accounts.find(a=>a.id===CASH_ACCOUNT_ID);
+ if(!account)return;
+ const current=currentBalance(CASH_ACCOUNT_ID);
+ if(current===null)return alert("请先更新汇率，或在外币消费账单中填写实际人民币扣款");
+ const text=prompt("设置流动资金当前可用余额（人民币）",Math.max(0,current/100).toFixed(2));
+ if(text===null)return;
+ const cents=parseAmount(text,true);
+ if(cents===null)return alert("金额无效");
+ const delta=cents-current;
+ if(delta===0)return;
+ if(!Number.isSafeInteger(delta))return alert("金额超出范围");
+ const old=clone(movements);
+ movements.push({
+  id:uuid(),kind:"valuation",accountId:CASH_ACCOUNT_ID,
+  cents:delta,date:today(),note:"设置流动资金余额",created:Date.now()
+ });
+ if(!persist())movements=old;
+ render();
+}
 
 function persist(){
  try{
@@ -516,6 +596,10 @@ function currenciesUsed(){
    result.add(a.currency);
   }
  });
+ records.forEach(record=>{
+  if(record.kind==="expense"&&expenseDebit(record)===null)
+   result.add(record.currency);
+ });
  return result;
 }
 
@@ -563,6 +647,7 @@ async function refreshRates(force=false){
     checkedAt:Date.now()
    };
    localStorage.setItem(RATES_KEY,JSON.stringify(rates));
+   if(migrateExpensesToCash())persist();
 
   }catch(e){
    console.warn("汇率更新失败",e.message);
@@ -630,14 +715,17 @@ function fillAccounts(){
   empty.textContent="请选择账户";
   select.append(empty);
 
-  leaves().forEach(a=>{
+  const choices=id==="accountSelect"&&kind==="expense"?
+   leaves().filter(a=>a.id===CASH_ACCOUNT_ID):leaves();
+  choices.forEach(a=>{
    const opt=document.createElement("option");
    opt.value=a.id;
    opt.textContent=a.name+" ("+a.currency+")";
    select.append(opt);
   });
 
-  select.value=old;
+  select.value=id==="accountSelect"&&kind==="expense"?CASH_ACCOUNT_ID:old;
+  if(id==="accountSelect")select.disabled=kind==="expense";
  }
  updateFormCurrency();
  updateMoveCurrencies();
@@ -648,10 +736,13 @@ function balance(id,opening){
  let sum=opening;
 
  records.forEach(r=>{
-  if(r.accountId===id)
-   sum+=r.kind==="income"?r.cents:-r.cents;
+  if(r.accountId!==id)return;
+  const cents=r.kind==="expense"&&id===CASH_ACCOUNT_ID?expenseDebit(r):r.cents;
+  if(cents===null){sum=null;return}
+  if(sum!==null)sum+=r.kind==="income"?cents:-cents;
  });
 
+ if(sum===null)return null;
  movements.forEach(m=>{
   if(m.kind==="transfer"){
    if(m.fromId===id)sum-=m.cents;
@@ -688,6 +779,7 @@ function parentLocalValues(a){
 function convertParts(parts){
  let total=0;
  for(const p of parts){
+  if(p.cents===null)return null;
   const v=yuan(p.cents,p.currency);
   if(v===null&&p.cents!==0)return null;
   total+=v||0;
@@ -703,7 +795,9 @@ function totalYuan(){
 function parentDisplay(a){
  if(assetHidden)return "••••••";
  if(a.mode==="single"){
-  return amount(parentLocalValues(a).reduce((s,x)=>s+x.cents,0),a.currency);
+  const parts=parentLocalValues(a);
+  return parts.some(p=>p.cents===null)?"汇率待更新":
+   amount(parts.reduce((s,x)=>s+x.cents,0),a.currency);
  }
  return formatYuan(parentYuan(a));
 }
@@ -760,6 +854,7 @@ function addAccount(){
 }
 
 function addChild(parentId){
+ if(parentId===CASH_ACCOUNT_ID)return alert("流动资金保持独立账户，用于全部消费扣款");
  const a=accounts.find(x=>x.id===parentId);
  if(!a)return;
 
@@ -821,6 +916,7 @@ function addChild(parentId){
 }
 
 function editAsset(parentId,childId=null){
+ if(parentId===CASH_ACCOUNT_ID)return setCashBalance();
  const a=accounts.find(x=>x.id===parentId);
  const target=childId?a?.children.find(c=>c.id===childId):a;
  if(!target)return;
@@ -858,6 +954,7 @@ function canDelete(ids){
 }
 
 function deleteAsset(parentId,childId=null){
+ if(parentId===CASH_ACCOUNT_ID)return alert("流动资金是默认消费账户，不能删除");
  const a=accounts.find(x=>x.id===parentId);
  if(!a)return;
 
@@ -898,13 +995,32 @@ function setKind(value){
  });
 
  if(categories[value].includes(old))target.value=old;
+ fillAccounts();
 }
 
-function updateFormCurrency(){
- const account=leaf(el("accountSelect").value);
- el("entryCurrency").textContent=account?
-  "本笔记账币种："+account.currency+"（原币记录）":
-  "请选择资金归属账户";
+function updateFormCurrency(recalculate=false){
+ const expense=kind==="expense";
+ const currency=el("expenseCurrency").value;
+ const cross=expense&&currency!=="CNY";
+ el("expenseCurrencyField").hidden=!expense;
+ el("cashDebitField").hidden=!cross;
+ el("cashDebit").disabled=!cross;
+ el("cashDebit").required=cross;
+ if(expense){
+  if(cross&&(recalculate||!el("cashDebit").value)){
+   const cents=parseAmount(el("amount").value);
+   const converted=cents===null?null:yuan(cents,currency);
+   el("cashDebit").value=converted===null?"":(Math.round(converted)/100).toFixed(2);
+  }
+  el("entryCurrency").textContent=cross?
+   "原币消费保留 "+currency+" 金额，按填写的人民币金额从流动资金扣款。":
+   "全部消费统一从流动资金扣款（人民币）。";
+ }else{
+  const account=leaf(el("accountSelect").value);
+  el("entryCurrency").textContent=account?
+   "本笔收入币种："+account.currency+"（原币记录）":
+   "请选择收入到账账户";
+ }
 }
 
 function resetForm(){
@@ -926,6 +1042,11 @@ function editRecord(id){
  setKind(r.kind);
 
  el("amount").value=(r.cents/100).toFixed(2);
+ if(r.kind==="expense"){
+  el("expenseCurrency").value=r.currency;
+  const debit=expenseDebit(r);
+  el("cashDebit").value=debit===null?"":(debit/100).toFixed(2);
+ }
  el("category").value=r.category;
  el("accountSelect").value=r.accountId||"";
  el("date").value=r.date;
@@ -940,26 +1061,34 @@ el("entryForm").onsubmit=e=>{
  e.preventDefault();
 
  const cents=parseAmount(el("amount").value);
- const account=leaf(el("accountSelect").value);
+ const account=leaf(kind==="expense"?CASH_ACCOUNT_ID:el("accountSelect").value);
+ const currency=kind==="expense"?el("expenseCurrency").value:account?.currency;
+ const cashDebitCents=kind==="expense"?
+  (currency==="CNY"?cents:parseAmount(el("cashDebit").value)):null;
  const date=el("date").value;
 
  if(cents===null)return alert("金额无效");
  if(!account)return alert("请选择账户");
+ if(kind==="expense"&&cashDebitCents===null)return alert("请填写实际人民币扣款金额");
  if(!validDate(date))return alert("日期无效");
 
  const old=clone(records);
  const previous=records.find(x=>x.id===editing);
 
  const record={
+  ...previous,
   id:editing||uuid(),
   kind,cents,
   accountId:account.id,
-  currency:account.currency,
+  currency,
   category:el("category").value,
   note:el("note").value.trim(),
   date,
   created:previous?.created||Date.now()
  };
+
+ if(kind==="expense")record.cashDebitCents=cashDebitCents;
+ else delete record.cashDebitCents;
 
  if(editing){
   records=records.map(r=>r.id===editing?record:r);
@@ -1039,6 +1168,8 @@ function saveMovement(){
    if(toCents===null)return alert("请填写实际到账金额");
   }
 
+  if(currentBalance(from.id)===null)
+   return alert("请先补全外币消费的人民币扣款金额");
   if(currentBalance(from.id)<cents)
    return alert("转出账户余额不足");
 
@@ -1055,6 +1186,7 @@ function saveMovement(){
   if(value===null)return alert("金额无效");
 
   const current=currentBalance(account.id);
+  if(current===null)return alert("请先补全外币消费的人民币扣款金额");
   const direction=el("valuationDirection").value;
   const delta=direction==="target"?value-current:
    direction==="increase"?value:-value;
@@ -1148,8 +1280,8 @@ function renderAssets(){
   title.textContent=a.name;
   const mode=document.createElement("div");
   mode.className="muted";
-  mode.textContent=a.mode==="multi"?"多币种账户":
-   a.currency+" · 单币种账户";
+  mode.textContent=a.id===CASH_ACCOUNT_ID?"日常消费统一扣款 · CNY":
+   a.mode==="multi"?"多币种账户":a.currency+" · 单币种账户";
   label.append(title,mode);
 
   const value=document.createElement("strong");
@@ -1197,7 +1329,7 @@ function renderAssets(){
 
   const edit=document.createElement("button");
   edit.className="smallbtn";
-  edit.textContent="编辑父级";
+  edit.textContent=a.id===CASH_ACCOUNT_ID?"设置余额":"编辑父级";
   edit.onclick=()=>editAsset(a.id);
 
   const remove=document.createElement("button");
@@ -1205,7 +1337,8 @@ function renderAssets(){
   remove.textContent="删除";
   remove.onclick=()=>deleteAsset(a.id);
 
-  buttons.append(add,edit,remove);
+  if(a.id===CASH_ACCOUNT_ID)buttons.append(edit);
+  else buttons.append(add,edit,remove);
   card.append(buttons);
   list.append(card);
 
@@ -1213,10 +1346,10 @@ function renderAssets(){
   home.append(entryRow(
    ["🏦","📈","💳","💰"][i%4],
    a.name,
-   a.mode==="multi"?"多币种 · 人民币估值":
-    a.currency+" · 原币",
+   a.id===CASH_ACCOUNT_ID?"日常消费统一扣款 · 点击设置":
+    a.mode==="multi"?"多币种 · 人民币估值":a.currency+" · 原币",
    parentDisplay(a),
-   ()=>showPage("assets")
+   ()=>a.id===CASH_ACCOUNT_ID?setCashBalance():showPage("assets")
   ));
  });
 }
@@ -1290,9 +1423,9 @@ function renderRecords(){
   month.getFullYear()+"年"+(month.getMonth()+1)+"月";
 
  const calculate=kind=>{
-  const parts=items.filter(r=>r.kind===kind).map(r=>({
-   cents:r.cents,currency:r.currency
-  }));
+  const parts=items.filter(r=>r.kind===kind).map(r=>kind==="expense"?
+   {cents:expenseDebit(r),currency:"CNY"}:
+   {cents:r.cents,currency:r.currency});
   return convertParts(parts);
  };
 
@@ -1308,7 +1441,9 @@ function renderRecords(){
   list.append(entryRow(
    r.kind==="income"?"💰":"🧾",
    r.category,
-   r.date+" · "+leafName(r.accountId)+" · "+r.note,
+   r.date+" · "+leafName(r.accountId)+
+    (r.kind==="expense"&&r.currency!=="CNY"?
+     " · 扣款 "+formatYuan(expenseDebit(r)):"")+" · "+r.note,
    (r.kind==="income"?"+":"−")+
     amount(r.cents,r.currency),
    ()=>editRecord(r.id)
@@ -1330,7 +1465,7 @@ function renderRecords(){
  }
 
  items.filter(r=>r.kind==="expense").forEach(r=>{
-  const v=yuan(r.cents,r.currency);
+  const v=expenseDebit(r);
   groups.set(r.category,(groups.get(r.category)||0)+(v||0));
  });
 
@@ -1438,7 +1573,7 @@ function download(name,type,text){
 }
 
 function exportJSON(){
- download("随手记账V15-"+today()+".json",
+ download("随手记账V16-"+today()+".json",
   "application/json",
   JSON.stringify({
    version:4,accounts,records,movements
@@ -1448,11 +1583,12 @@ function exportJSON(){
 function exportCSV(){
  const quote=x=>'"'+String(x).replace(/"/g,'""')+'"';
  const rows=[
-  ["日期","类型","分类","账户","币种","金额","备注"],
+  ["日期","类型","分类","账户","币种","金额","备注","流动资金扣款（人民币）"],
   ...records.map(r=>[
    r.date,r.kind,r.category,
    leafName(r.accountId),r.currency,
-   (r.cents/100).toFixed(2),r.note
+   (r.cents/100).toFixed(2),r.note,
+   r.kind==="expense"?(expenseDebit(r)===null?"待补全":(expenseDebit(r)/100).toFixed(2)):""
   ])
  ];
 
@@ -1502,6 +1638,7 @@ function clearAll(){
 
  const old=clone({accounts,records,movements});
  accounts=[];records=[];movements=[];
+ ensureCashAccount();
 
  if(!persist()){
   accounts=old.accounts;
@@ -1523,8 +1660,11 @@ let cloudMeta=readObject(META_KEY)||{
  sha:null,snapshot:null
 };
 
-function snapshot(){
- return JSON.stringify({records,accounts,movements});
+// 远端快照保留迁移前的内容，确保迁移结果会被识别为待上传修改。
+function snapshot(data={records,accounts,movements}){
+ return JSON.stringify({
+  records:data.records,accounts:data.accounts,movements:data.movements
+ });
 }
 
 function saveMeta(){
@@ -1647,7 +1787,7 @@ async function connectCloud(){
 
   if(cloudMeta.snapshot===null){
    controls(true);
-   status("✅ 云端已连接，首次使用 V1.5，请选择上传本机或恢复云端");
+   status("✅ 云端已连接，首次连接请选择上传本机或恢复云端");
   }else{
    controls(false);
    status("✅ 已连接，正在核对数据");
@@ -1734,7 +1874,7 @@ async function restoreCloud(){
 
   cloudMeta={
    sha:latest.sha,
-   snapshot:snapshot()
+   snapshot:snapshot(latest)
   };
   saveMeta();
   remoteLedger=latest;
@@ -1864,7 +2004,7 @@ async function syncCloud(){
 
    cloudMeta={
     sha:latest.sha,
-    snapshot:snapshot()
+    snapshot:snapshot(latest)
    };
    saveMeta();
    remoteLedger=latest;
@@ -1900,7 +2040,10 @@ document.addEventListener("visibilitychange",()=>{
  }
 });
 
-// 首次启动
+// 首次启动：默认账户与历史消费迁移只做一次，已迁移账单不会重复扣款。
+const beforeCashMigration=snapshot();
+migrateLocal();
+if(snapshot()!==beforeCashMigration)persist();
 el("moveDate").value=today();
 resetForm();
 render();
@@ -1917,4 +2060,5 @@ try{
 </script>
 </body>
 </html>
+
 
