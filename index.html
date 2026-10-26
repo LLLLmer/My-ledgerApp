@@ -1,53 +1,1176 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="随手记账"><meta name="theme-color" content="#f4f7fc">
-<title>随手记账</title>
+<meta charset="UTF-8">
+<meta name="viewport"
+ content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4f7fc">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="随手记账">
+<title>随手记账 V1.1</title>
+
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;color:#1f2d46;background:#f4f7fc;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-height:100dvh}button,input,select,textarea{font:inherit}button{cursor:pointer}button:active{transform:scale(.985)}.app{max-width:520px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 18px calc(102px + env(safe-area-inset-bottom))}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.brand{font-size:23px;font-weight:800;letter-spacing:-.5px}.muted{color:#8a97aa;font-size:13px}.circle{border:0;background:white;border-radius:50%;height:42px;width:42px;font-size:20px}.hero{background:linear-gradient(135deg,#243b7e,#4267bd);border-radius:25px;padding:24px;color:#fff;box-shadow:0 14px 32px #3862ae33}.hero .muted{color:#d4ddf3}.balance{font-size:38px;font-weight:750;letter-spacing:-1.3px;margin:10px 0 22px;font-variant-numeric:tabular-nums}.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}.summary>div{background:#ffffff20;border-radius:15px;padding:12px}.summary strong{display:block;margin-top:7px;font-size:18px}.section{display:flex;justify-content:space-between;align-items:center;margin:25px 1px 13px}.section h3{font-size:17px;margin:0}.link{border:0;color:#4267bd;background:none;font-size:13px;font-weight:700}.card{background:white;border-radius:19px;padding:17px;box-shadow:0 4px 18px #23406908}.entries{display:flex;flex-direction:column;gap:10px}.entry{display:flex;align-items:center;gap:12px;padding:13px 14px;background:white;border-radius:17px;min-height:68px}.emoji{height:43px;width:43px;flex:none;display:grid;place-items:center;background:#f1f5fd;border-radius:13px;font-size:21px}.entry-content{flex:1;min-width:0}.entry-name{font-size:15px;font-weight:680}.entry-note{color:#8a97aa;font-size:12px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.money{font-weight:750;white-space:nowrap}.income{color:#19a77d}.expense{color:#202e46}.empty{text-align:center;padding:48px 14px;color:#8995a8;background:white;border-radius:19px}.tabs{display:flex;position:fixed;bottom:0;left:0;right:0;margin:auto;max-width:520px;justify-content:space-around;background:#ffffffee;backdrop-filter:blur(18px);border-top:1px solid #eef0f7;padding:11px 8px calc(12px + env(safe-area-inset-bottom));z-index:10}.tab{background:none;border:0;color:#9ba6b9;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;width:23%}.tab .ic{font-size:22px}.tab.on{color:#4267bd;font-weight:750}.page{display:none}.page.on{display:block}.pill{display:inline-flex;border-radius:12px;padding:9px 13px;background:white;color:#3d5f9e;border:1px solid #e7ecf6;font-weight:700}.monthbar{display:flex;justify-content:space-between;align-items:center;gap:8px}.monthbar button{background:white;border:0;border-radius:10px;padding:8px 13px;color:#4566af}.monthbar strong{font-size:16px}.field{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}.field label{font-weight:700;font-size:14px}.field input,.field select,.field textarea{width:100%;border:1px solid #e5ebf5;background:#fff;border-radius:13px;padding:14px;color:#253652;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:#6a8ceb}.toggle{display:flex;background:#e9eef8;border-radius:14px;padding:5px;margin:12px 0 24px}.toggle button{flex:1;border:0;background:none;border-radius:11px;padding:12px;font-weight:750;color:#7082a0}.toggle button.active{background:#fff;color:#3155aa;box-shadow:0 2px 7px #243d7618}.primary{border:0;border-radius:14px;background:#4569bf;color:white;font-weight:750;padding:15px;width:100%;margin-top:4px}.danger{color:#e45464}.outline{border:1px solid #e0e5ef;background:white;color:#334c7a;padding:13px 16px;border-radius:13px;font-weight:700}.statsRow{margin:15px 0}.statTitle{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px}.bar{height:10px;background:#eef2fa;border-radius:20px;overflow:hidden}.bar div{height:100%;background:#6d8de5;border-radius:20px}.hint{font-size:12px;color:#8291a7;line-height:1.7}.listTitle{font-weight:800;font-size:20px;margin-bottom:20px}.footerbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}.num{font-variant-numeric:tabular-nums}.toast{position:fixed;top:calc(15px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:#223456;color:#fff;border-radius:99px;padding:10px 20px;z-index:30;font-size:13px;display:none;max-width:85%;text-align:center}.toast.show{display:block}
+:root {
+  font-family:-apple-system,BlinkMacSystemFont,
+    "PingFang SC",sans-serif;
+  color:#1f2d46;
+  background:#f4f7fc;
+}
+* { box-sizing:border-box; }
+body { margin:0; }
+button,input,select,textarea { font:inherit; }
+button { cursor:pointer; }
+.app {
+  max-width:520px;
+  margin:auto;
+  padding:calc(20px + env(safe-area-inset-top))
+    18px calc(105px + env(safe-area-inset-bottom));
+}
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+h1 { font-size:24px; margin:0; }
+h2 { font-size:20px; }
+h3 { margin:0 0 12px; }
+.muted { color:#8290a5; font-size:13px; }
+.hero {
+  background:linear-gradient(135deg,#243b7e,#4267bd);
+  color:white;
+  border-radius:24px;
+  padding:24px;
+  box-shadow:0 12px 25px #4267bd28;
+}
+.hero .muted { color:#d4dff6; }
+.balance { font-size:37px; font-weight:800; margin:12px 0 22px; }
+.summary { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.summary div {
+  padding:12px;
+  background:#ffffff20;
+  border-radius:14px;
+}
+.summary strong { display:block; margin-top:7px; }
+.card {
+  background:white;
+  border-radius:19px;
+  padding:17px;
+  margin:15px 0;
+  box-shadow:0 4px 18px #23406909;
+}
+.section {
+  margin:24px 0 12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.entry {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:white;
+  border-radius:16px;
+  padding:14px;
+  margin:9px 0;
+  cursor:pointer;
+}
+.emoji {
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  background:#f1f5fd;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+}
+.info { flex:1; min-width:0; }
+.info small {
+  color:#8995a8;
+  display:block;
+  margin-top:5px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.money { font-weight:750; white-space:nowrap; }
+.income { color:#15a77a; }
+.field { margin:17px 0; }
+.field label {
+  display:block;
+  font-weight:700;
+  font-size:14px;
+  margin-bottom:8px;
+}
+.field input,.field select,.field textarea {
+  width:100%;
+  padding:14px;
+  border:1px solid #e2e9f4;
+  border-radius:12px;
+  outline:none;
+  background:white;
+  color:#24334c;
+}
+.primary,.outline,.danger {
+  border-radius:13px;
+  padding:14px;
+  font-weight:700;
+  border:0;
+}
+.primary { background:#4569bf; color:white; }
+.outline {
+  background:#f5f7fc;
+  color:#3d5f9e;
+  border:1px solid #e0e6f2;
+}
+.danger { color:#d94656; background:#fff0f1; }
+.full { width:100%; margin-top:10px; }
+.two { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.tabs {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  margin:auto;
+  max-width:520px;
+  display:flex;
+  justify-content:space-around;
+  background:#fffffff0;
+  backdrop-filter:blur(18px);
+  border-top:1px solid #e7ecf5;
+  padding:12px 5px calc(14px + env(safe-area-inset-bottom));
+  z-index:10;
+}
+.tab {
+  border:0;
+  background:none;
+  color:#8795ab;
+  font-size:12px;
+  width:24%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+.tab span { font-size:23px; }
+.tab.active { color:#4267bd; font-weight:800; }
+.page { display:none; }
+.page.active { display:block; }
+.monthbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:15px 0;
+}
+.monthbar button {
+  border:0;
+  background:white;
+  border-radius:9px;
+  padding:9px 12px;
+}
+.bar {
+  background:#edf1f8;
+  height:10px;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:7px;
+}
+.bar div { background:#6a8ce1; height:100%; }
+.stat { margin:16px 0; }
+.hint {
+  font-size:12px;
+  color:#8291a7;
+  line-height:1.8;
+}
+.status {
+  font-size:13px;
+  padding:13px;
+  background:#f0f5ff;
+  border-radius:12px;
+  line-height:1.7;
+  margin:12px 0;
+  overflow-wrap:anywhere;
+}
+.toggle { display:flex; gap:10px; margin:18px 0; }
+.toggle button { flex:1; }
+.selected { background:#4569bf; color:white; }
+.empty {
+  text-align:center;
+  padding:35px 10px;
+  color:#8995a8;
+}
 </style>
 </head>
+
 <body>
-<div class="toast" id="toast"></div>
-<main class="app"><header class="top"><div><div class="brand">✦ 随手记账</div><div class="muted">把每一笔生活记录下来</div></div><button class="circle" onclick="switchPage('settings')" aria-label="设置">⚙️</button></header>
-<section id="home" class="page on"><div class="hero"><div class="muted">本月结余 · <span id="homeMonth"></span></div><div class="balance" id="balance">¥0.00</div><div class="summary"><div><span class="muted">↗ 本月收入</span><strong class="num" id="homeIncome">¥0.00</strong></div><div><span class="muted">↘ 本月支出</span><strong class="num" id="homeExpense">¥0.00</strong></div></div></div><div class="section"><h3>最近账单</h3><button class="link" onclick="switchPage('records')">查看全部 ›</button></div><div id="recent" class="entries"></div></section>
-<section id="add" class="page"><div class="listTitle" id="editTitle">记一笔</div><div class="toggle"><button id="expenseBtn" class="active" onclick="setKind('expense')">支出</button><button id="incomeBtn" onclick="setKind('income')">收入</button></div><form id="entryForm"><div class="field"><label for="amount">金额（元）</label><input id="amount" type="number" inputmode="decimal" min="0.01" max="999999999" step="0.01" placeholder="0.00" required></div><div class="field"><label for="category">分类</label><select id="category"></select></div><div class="field"><label for="date">日期</label><input id="date" type="date" required></div><div class="field"><label for="note">备注（选填）</label><textarea id="note" rows="2" maxlength="100" placeholder="记录这笔钱的用途"></textarea></div><button class="primary" type="submit" id="saveBtn">保存账单</button><button type="button" class="outline danger" id="deleteBtn" style="display:none;width:100%;margin-top:10px" onclick="deleteEditing()">删除这笔账单</button><button type="button" class="link" id="cancelBtn" style="display:none;width:100%;padding:14px" onclick="resetForm();switchPage('records')">取消编辑</button></form></section>
-<section id="records" class="page"><div class="listTitle">全部账单</div><div class="monthbar"><button onclick="moveMonth(-1)">‹ 上月</button><strong id="listMonth"></strong><button onclick="moveMonth(1)">下月 ›</button></div><div class="section"><h3>当月记录</h3><span class="muted" id="count"></span></div><div class="entries" id="allRecords"></div></section>
-<section id="stats" class="page"><div class="listTitle">收支统计</div><div class="monthbar"><button onclick="moveMonth(-1)">‹ 上月</button><strong id="statMonth"></strong><button onclick="moveMonth(1)">下月 ›</button></div><div class="section"><h3>当月汇总</h3></div><div class="card"><div class="summary" style="color:#273a62"><div style="background:#f1f6fc"><span class="muted">收入</span><strong id="statIncome">¥0.00</strong></div><div style="background:#f1f6fc"><span class="muted">支出</span><strong id="statExpense">¥0.00</strong></div></div></div><div class="section"><h3>支出分类占比</h3></div><div class="card" id="breakdown"></div></section>
-<section id="settings" class="page"><div class="listTitle">设置与备份</div><div class="card"><h3 style="margin-top:0">数据保存在本机</h3><p class="hint">账单只保存在当前浏览器或主屏幕网页 App 的本地存储中。更换设备、清理网站数据或删除 App 可能造成数据丢失。请定期导出备份。</p><div class="footerbtns"><button class="outline" onclick="exportData()">↓ 导出 JSON</button><button class="outline" onclick="document.getElementById('importFile').click()">↑ 导入 JSON</button></div><input id="importFile" type="file" accept=".json,application/json" hidden onchange="importData(event)"><button class="outline" style="width:100%;margin-top:10px" onclick="exportCSV()">↓ 导出 CSV（Excel）</button></div><div class="section"><h3>其他操作</h3></div><div class="card"><button class="outline danger" style="width:100%" onclick="clearAll()">清空所有账单</button></div><p class="hint" style="margin-top:18px">版本 V1.0 · 无广告 · 无账号 · 无联网传输功能。建议用 Safari 打开托管的网址后“添加到主屏幕”。直接打开本地 HTML 文件时，iOS 对文件存储和桌面安装的支持可能受限。</p></section>
+<main class="app">
+<header>
+  <div>
+    <h1>✦ 随手记账</h1>
+    <div class="muted">记录生活中的每一笔收支</div>
+  </div>
+  <button class="outline" onclick="page('settings')">⚙️</button>
+</header>
+
+<section id="home" class="page active">
+  <div class="hero">
+    <div class="muted">本月结余 · <span id="homeMonth"></span></div>
+    <div class="balance" id="balance">¥0.00</div>
+    <div class="summary">
+      <div><span class="muted">本月收入</span>
+        <strong id="homeIncome">¥0.00</strong></div>
+      <div><span class="muted">本月支出</span>
+        <strong id="homeExpense">¥0.00</strong></div>
+    </div>
+  </div>
+  <div class="section">
+    <h3>最近账单</h3>
+    <button class="outline" onclick="page('records')">查看全部</button>
+  </div>
+  <div id="recent"></div>
+</section>
+
+<section id="records" class="page">
+  <h2>全部账单</h2>
+  <div class="monthbar">
+    <button onclick="moveMonth(-1)">‹ 上月</button>
+    <strong id="listMonth"></strong>
+    <button onclick="moveMonth(1)">下月 ›</button>
+  </div>
+  <div id="allRecords"></div>
+</section>
+
+<section id="add" class="page">
+  <h2 id="formTitle">记一笔</h2>
+  <div class="toggle">
+    <button class="outline selected" id="expenseBtn"
+      onclick="setKind('expense')">支出</button>
+    <button class="outline" id="incomeBtn"
+      onclick="setKind('income')">收入</button>
+  </div>
+  <form id="entryForm">
+    <div class="field">
+      <label>金额（元）</label>
+      <input id="amount" type="number" min="0.01"
+        step="0.01" inputmode="decimal" required>
+    </div>
+    <div class="field">
+      <label>分类</label>
+      <select id="category"></select>
+    </div>
+    <div class="field">
+      <label>日期</label>
+      <input id="date" type="date" required>
+    </div>
+    <div class="field">
+      <label>备注</label>
+      <textarea id="note" rows="2" maxlength="100"></textarea>
+    </div>
+    <button type="submit" class="primary full">保存账单</button>
+    <button type="button" class="danger full"
+      id="deleteBtn" hidden onclick="deleteRecord()">删除账单</button>
+    <button type="button" class="outline full"
+      onclick="resetForm();page('records')">取消</button>
+  </form>
+</section>
+
+<section id="stats" class="page">
+  <h2>收支统计</h2>
+  <div class="monthbar">
+    <button onclick="moveMonth(-1)">‹ 上月</button>
+    <strong id="statMonth"></strong>
+    <button onclick="moveMonth(1)">下月 ›</button>
+  </div>
+  <div class="card">
+    <div class="two">
+      <div>收入<strong id="statIncome"></strong></div>
+      <div>支出<strong id="statExpense"></strong></div>
+    </div>
+  </div>
+  <h3>支出分类</h3>
+  <div class="card" id="breakdown"></div>
+</section>
+
+<section id="settings" class="page">
+  <h2>设置与备份</h2>
+
+  <div class="card">
+    <h3>本地数据备份</h3>
+    <p class="hint">请定期导出 JSON 备份并保存到 iCloud Drive。</p>
+    <div class="two">
+      <button class="outline" onclick="exportJSON()">导出 JSON</button>
+      <button class="outline"
+        onclick="document.getElementById('importFile').click()">
+        导入 JSON
+      </button>
+    </div>
+    <input type="file" id="importFile" accept=".json,application/json"
+      hidden onchange="importJSON(event)">
+    <button class="outline full" onclick="exportCSV()">导出 CSV</button>
+  </div>
+
+  <div class="card">
+    <h3>☁️ GitHub 云端同步</h3>
+    <p class="hint">
+      数据通过 Cloudflare Worker 保存到 GitHub 私有仓库。
+      首次连接必须手动选择上传或恢复，避免误覆盖。
+    </p>
+
+    <div class="field">
+      <label>同步密码</label>
+      <input type="password" id="cloudPassword"
+        autocomplete="off" placeholder="输入 SYNC_PASSWORD">
+    </div>
+
+    <button class="primary full" onclick="connectCloud()">
+      连接并检查云端
+    </button>
+
+    <div class="status" id="cloudStatus">
+      未连接 · 本地记账正常
+    </div>
+
+    <div id="cloudActions" hidden>
+      <div class="two">
+        <button class="outline" onclick="firstUpload()">上传本机</button>
+        <button class="outline" onclick="restoreCloud()">恢复云端</button>
+      </div>
+      <button class="outline full" onclick="mergeCloud()">
+        合并两边账单
+      </button>
+    </div>
+
+    <button id="syncBtn" class="outline full"
+      hidden onclick="syncCloud()">立即检查并同步</button>
+
+    <p class="hint">
+      连接后自动同步新增及修改的账单。
+      关闭页面后同步密码不会保留，重新打开需再次连接。
+      同步成功前请保留本地备份。
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>其他操作</h3>
+    <button class="danger full" onclick="clearAll()">清空本机账单</button>
+  </div>
+  <p class="hint">随手记账 V1.1 · GitHub 云同步版</p>
+</section>
 </main>
-<nav class="tabs" aria-label="主导航"><button class="tab on" data-page="home" onclick="switchPage('home')"><span class="ic">⌂</span>首页</button><button class="tab" data-page="records" onclick="switchPage('records')"><span class="ic">▤</span>账单</button><button class="tab" data-page="add" onclick="resetForm();switchPage('add')"><span class="ic">⊕</span>记一笔</button><button class="tab" data-page="stats" onclick="switchPage('stats')"><span class="ic">◉</span>统计</button></nav>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="home"
+    onclick="page('home')"><span>⌂</span>首页</button>
+  <button class="tab" data-tab="records"
+    onclick="page('records')"><span>▤</span>账单</button>
+  <button class="tab" data-tab="add"
+    onclick="resetForm();page('add')"><span>⊕</span>记一笔</button>
+  <button class="tab" data-tab="stats"
+    onclick="page('stats')"><span>◉</span>统计</button>
+</nav>
+
 <script>
-'use strict';
-const KEY='myLedgerSingleHtmlV1';
-const categories={expense:[['餐饮','🍜'],['购物','🛍️'],['交通','🚕'],['住房','🏠'],['娱乐','🎮'],['医疗','💊'],['日用','🧴'],['其他','📦']],income:[['工资','💼'],['奖金','🎁'],['兼职','🧑‍💻'],['理财','📈'],['其他','💰']]};
-let records=[];try{const saved=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(saved))records=saved.filter(validRecord)}catch(e){console.warn('无法读取本地账单',e)}
-let kind='expense',editing=null,month=new Date();month.setDate(1);let toastTimer;
-const el=id=>document.getElementById(id),money=n=>'¥'+(n/100).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
-function validRecord(r){return r&&typeof r.id==='string'&&(r.kind==='expense'||r.kind==='income')&&Number.isSafeInteger(r.cents)&&r.cents>0&&r.cents<=99999999900&&typeof r.category==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(r.date)&&typeof r.note==='string'}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(records));return true}catch(e){toast('保存失败：本地空间不足或存储不可用');return false}}
-function toast(s){el('toast').textContent=s;el('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el('toast').classList.remove('show'),2600)}
-function today(){const d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
-function monthPrefix(){return `${month.getFullYear()}-${String(month.getMonth()+1).padStart(2,'0')}`}
-function monthLabel(){return `${month.getFullYear()}年${month.getMonth()+1}月`}
-function selected(){return records.filter(x=>x.date.startsWith(monthPrefix())).sort((a,b)=>b.date.localeCompare(a.date)||(b.created||0)-(a.created||0))}
-function sum(a,k){return a.filter(r=>r.kind===k).reduce((s,r)=>s+r.cents,0)}
-function plain(tag,klass,t){const n=document.createElement(tag);if(klass)n.className=klass;n.textContent=t;return n}
-function list(items,target){target.replaceChildren();if(!items.length){target.append(plain('div','empty','这里还没有账单，点「记一笔」开始吧 ✨'));return}items.forEach(r=>{const row=plain('div','entry','');const em=plain('div','emoji',(categories[r.kind].find(x=>x[0]===r.category)||['','💳'])[1]);const middle=plain('div','entry-content','');middle.append(plain('div','entry-name',r.category),plain('div','entry-note',`${r.date} ${r.note||''}`));const amt=plain('div','money '+r.kind,(r.kind==='income'?'+':'−')+money(r.cents));row.append(em,middle,amt);row.onclick=()=>edit(r.id);target.append(row)})}
-function render(){const a=selected(),inc=sum(a,'income'),exp=sum(a,'expense');el('homeMonth').textContent=monthLabel();el('balance').textContent=(inc-exp<0?'−':'')+money(Math.abs(inc-exp));el('homeIncome').textContent=money(inc);el('homeExpense').textContent=money(exp);el('listMonth').textContent=el('statMonth').textContent=monthLabel();el('count').textContent=a.length+' 笔';el('statIncome').textContent=money(inc);el('statExpense').textContent=money(exp);list(a.slice(0,5),el('recent'));list(a,el('allRecords'));const breakdown=el('breakdown');breakdown.replaceChildren();if(!exp){breakdown.append(plain('div','hint','这个月还没有支出记录。'));return}const amounts=new Map();a.filter(r=>r.kind==='expense').forEach(r=>amounts.set(r.category,(amounts.get(r.category)||0)+r.cents));[...amounts].sort((a,b)=>b[1]-a[1]).forEach(([name,cents])=>{const percent=cents/exp*100;const row=plain('div','statsRow',''),heading=plain('div','statTitle',''),bar=plain('div','bar',''),fill=plain('div','','');heading.append(plain('span','',name),plain('span','num',`${money(cents)} · ${percent.toFixed(1)}%`));fill.style.width=percent+'%';bar.append(fill);row.append(heading,bar);breakdown.append(row)})}
-function switchPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===id));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.page===id));if(id==='home'||id==='records'||id==='stats')render();window.scrollTo(0,0)}
-function setKind(v){kind=v;el('expenseBtn').classList.toggle('active',v==='expense');el('incomeBtn').classList.toggle('active',v==='income');const category=el('category'),old=category.value;category.replaceChildren();categories[kind].forEach(([name,emoji])=>{const op=document.createElement('option');op.value=name;op.textContent=emoji+' '+name;category.append(op)});if(categories[kind].some(x=>x[0]===old))category.value=old}
-function resetForm(){editing=null;el('entryForm').reset();el('date').value=today();el('editTitle').textContent='记一笔';el('saveBtn').textContent='保存账单';el('deleteBtn').style.display='none';el('cancelBtn').style.display='none';setKind('expense')}
-function edit(id){const r=records.find(x=>x.id===id);if(!r)return;resetForm();editing=id;setKind(r.kind);el('amount').value=(r.cents/100).toFixed(2);el('category').value=r.category;el('date').value=r.date;el('note').value=r.note;el('editTitle').textContent='编辑账单';el('saveBtn').textContent='保存修改';el('deleteBtn').style.display='block';el('cancelBtn').style.display='block';switchPage('add')}
-el('entryForm').onsubmit=e=>{e.preventDefault();const raw=el('amount').value.trim();if(!/^(\d+)(\.\d{1,2})?$/.test(raw)){toast('请输入最多两位小数的金额');return}const parts=raw.split('.'),cents=Number(parts[0])*100+Number((parts[1]||'').padEnd(2,'0'));if(!Number.isSafeInteger(cents)||cents<=0||cents>99999999900){toast('金额不正确');return}const date=el('date').value;if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){toast('请选择有效日期');return}const old=records.slice();const r={id:editing||((crypto.randomUUID&&crypto.randomUUID())||String(Date.now())+'-'+Math.random()),kind,cents,category:el('category').value,date,note:el('note').value.trim(),created:editing?(records.find(x=>x.id===editing)||{}).created||Date.now():Date.now()};if(editing)records=records.map(x=>x.id===editing?r:x);else records.push(r);if(!save()){records=old;return}month=new Date(Number(date.slice(0,4)),Number(date.slice(5,7))-1,1);resetForm();switchPage('home');toast('账单已保存')};
-function deleteEditing(){if(!editing||!confirm('确定删除这笔账单吗？'))return;const old=records.slice();records=records.filter(x=>x.id!==editing);if(!save()){records=old;return}resetForm();switchPage('records');toast('已删除')}
-function moveMonth(delta){month.setMonth(month.getMonth()+delta);render()}
-function download(name,type,data){const url=URL.createObjectURL(new Blob([data],{type}));const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000)}
-function exportData(){download('记账备份-'+today()+'.json','application/json;charset=utf-8',JSON.stringify({version:1,exportDate:new Date().toISOString(),records},null,2));toast('已生成备份文件，请保存到「文件」App')}
-function exportCSV(){const esc=s=>'"'+String(s).replace(/"/g,'""')+'"';const rows=[['日期','类型','分类','金额','备注'],...records.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(r=>[r.date,r.kind==='income'?'收入':'支出',r.category,(r.cents/100).toFixed(2),r.note])];download('记账明细-'+today()+'.csv','text/csv;charset=utf-8','\ufeff'+rows.map(row=>row.map(esc).join(',')).join('\r\n'));toast('已导出 CSV')}
-async function importData(event){const file=event.target.files[0];event.target.value='';if(!file)return;try{const obj=JSON.parse(await file.text());if(!obj||!Array.isArray(obj.records)||obj.records.length>50000||!obj.records.every(validRecord))throw Error('备份格式不正确');if(!confirm(`导入 ${obj.records.length} 条记录？这将替换当前账本。请先备份现有记录。`))return;const old=records;records=obj.records;if(!save()){records=old;return}render();toast('导入成功')}catch(e){toast('导入失败：'+e.message)}}
-function clearAll(){if(!confirm('将永久清空当前设备上的所有账单。确定继续？'))return;if(!confirm('最后确认：你已经备份了吗？'))return;const old=records;records=[];if(!save()){records=old;return}render();toast('账本已清空')}
-setKind('expense');resetForm();render();
+"use strict";
+
+// 保持与旧版相同的本地存储键
+const KEY = "myLedgerSingleHtmlV1";
+const META_KEY = "myLedgerCloudMetaV1";
+
+const CLOUD_URL =
+  "https://ledger-sync.l1154723176.workers.dev/ledger";
+
+const categories = {
+  expense: [
+    ["餐饮","🍜"],["购物","🛍️"],["交通","🚕"],
+    ["住房","🏠"],["娱乐","🎮"],["医疗","💊"],
+    ["日用","🧴"],["其他","📦"]
+  ],
+  income: [
+    ["工资","💼"],["奖金","🎁"],["兼职","💻"],
+    ["理财","📈"],["其他","💰"]
+  ]
+};
+
+const el = id => document.getElementById(id);
+
+function validRecord(r) {
+  return r &&
+    typeof r.id === "string" &&
+    (r.kind === "income" || r.kind === "expense") &&
+    Number.isSafeInteger(r.cents) &&
+    r.cents > 0 &&
+    r.cents <= 99999999900 &&
+    typeof r.category === "string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(r.date) &&
+    typeof r.note === "string";
+}
+
+let records = [];
+try {
+  const data = JSON.parse(localStorage.getItem(KEY) || "[]");
+  if (Array.isArray(data)) {
+    records = data.filter(validRecord);
+  }
+} catch(e) {
+  console.error("读取本地账本失败", e);
+}
+
+let kind = "expense";
+let editing = null;
+let month = new Date();
+month.setDate(1);
+
+function money(cents) {
+  return "¥" + (cents / 100).toLocaleString("zh-CN", {
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
+}
+
+function today() {
+  const d = new Date();
+  return [
+    d.getFullYear(),
+    String(d.getMonth()+1).padStart(2,"0"),
+    String(d.getDate()).padStart(2,"0")
+  ].join("-");
+}
+
+function persist() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(records));
+    queueCloudSync();
+    return true;
+  } catch(e) {
+    alert("本机保存失败，请检查存储空间");
+    return false;
+  }
+}
+
+function page(name) {
+  document.querySelectorAll(".page").forEach(n =>
+    n.classList.toggle("active", n.id === name)
+  );
+  document.querySelectorAll(".tab").forEach(n =>
+    n.classList.toggle("active", n.dataset.tab === name)
+  );
+  render();
+  window.scrollTo(0,0);
+}
+
+function monthPrefix() {
+  return month.getFullYear() + "-" +
+    String(month.getMonth()+1).padStart(2,"0");
+}
+
+function selectedRecords() {
+  return records.filter(r => r.date.startsWith(monthPrefix()))
+    .sort((a,b) => b.date.localeCompare(a.date) ||
+      (b.created || 0) - (a.created || 0));
+}
+
+function sum(items, type) {
+  return items.filter(r => r.kind === type)
+    .reduce((s,r) => s + r.cents, 0);
+}
+
+function makeEntry(r) {
+  const div = document.createElement("div");
+  div.className = "entry";
+
+  const icon = categories[r.kind]
+    .find(x => x[0] === r.category)?.[1] || "💳";
+
+  const emoji = document.createElement("div");
+  emoji.className = "emoji";
+  emoji.textContent = icon;
+
+  const info = document.createElement("div");
+  info.className = "info";
+  const title = document.createElement("strong");
+  title.textContent = r.category;
+  const detail = document.createElement("small");
+  detail.textContent = r.date + " " + r.note;
+  info.append(title,detail);
+
+  const amount = document.createElement("div");
+  amount.className = "money " + r.kind;
+  amount.textContent =
+    (r.kind === "income" ? "+" : "−") + money(r.cents);
+
+  div.append(emoji,info,amount);
+  div.onclick = () => editRecord(r.id);
+  return div;
+}
+
+function renderList(id,items) {
+  const parent = el(id);
+  parent.replaceChildren();
+
+  if (!items.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "还没有账单，开始记一笔吧";
+    parent.append(empty);
+    return;
+  }
+  items.forEach(r => parent.append(makeEntry(r)));
+}
+
+function render() {
+  const a = selectedRecords();
+  const income = sum(a,"income");
+  const expense = sum(a,"expense");
+  const label = month.getFullYear() + "年" +
+    (month.getMonth()+1) + "月";
+
+  el("homeMonth").textContent = label;
+  el("listMonth").textContent = label;
+  el("statMonth").textContent = label;
+  el("balance").textContent =
+    (income-expense < 0 ? "−" : "") +
+    money(Math.abs(income-expense));
+
+  el("homeIncome").textContent = money(income);
+  el("homeExpense").textContent = money(expense);
+  el("statIncome").textContent = money(income);
+  el("statExpense").textContent = money(expense);
+
+  renderList("recent",a.slice(0,5));
+  renderList("allRecords",a);
+
+  const target = el("breakdown");
+  target.replaceChildren();
+
+  if (!expense) {
+    target.textContent = "本月暂无支出";
+    return;
+  }
+
+  const groups = new Map();
+  a.filter(r => r.kind === "expense").forEach(r =>
+    groups.set(r.category,
+      (groups.get(r.category)||0) + r.cents)
+  );
+
+  [...groups].sort((a,b)=>b[1]-a[1]).forEach(([name,value])=>{
+    const percent = value / expense * 100;
+    const row = document.createElement("div");
+    row.className = "stat";
+
+    const label = document.createElement("div");
+    label.textContent =
+      name + " · " + money(value) +
+      " (" + percent.toFixed(1) + "%)";
+
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    const fill = document.createElement("div");
+    fill.style.width = percent + "%";
+    bar.append(fill);
+
+    row.append(label,bar);
+    target.append(row);
+  });
+}
+
+function moveMonth(delta) {
+  month.setMonth(month.getMonth()+delta);
+  render();
+}
+
+function setKind(value) {
+  kind = value;
+  el("expenseBtn").classList.toggle("selected",kind==="expense");
+  el("incomeBtn").classList.toggle("selected",kind==="income");
+
+  const select = el("category");
+  const previous = select.value;
+  select.replaceChildren();
+
+  categories[kind].forEach(([name,emoji])=>{
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = emoji + " " + name;
+    select.append(option);
+  });
+
+  if (categories[kind].some(x=>x[0]===previous)) {
+    select.value = previous;
+  }
+}
+
+function resetForm() {
+  editing = null;
+  el("entryForm").reset();
+  el("date").value = today();
+  el("formTitle").textContent = "记一笔";
+  el("deleteBtn").hidden = true;
+  setKind("expense");
+}
+
+function editRecord(id) {
+  const r = records.find(x=>x.id===id);
+  if (!r) return;
+
+  resetForm();
+  editing = id;
+  setKind(r.kind);
+  el("amount").value = (r.cents/100).toFixed(2);
+  el("category").value = r.category;
+  el("date").value = r.date;
+  el("note").value = r.note;
+  el("formTitle").textContent = "编辑账单";
+  el("deleteBtn").hidden = false;
+  page("add");
+}
+
+el("entryForm").onsubmit = event => {
+  event.preventDefault();
+
+  const raw = el("amount").value.trim();
+  if (!/^\d+(\.\d{1,2})?$/.test(raw)) {
+    alert("金额最多只能保留两位小数");
+    return;
+  }
+
+  const parts = raw.split(".");
+  const cents = Number(parts[0])*100 +
+    Number((parts[1]||"").padEnd(2,"0"));
+
+  if (!Number.isSafeInteger(cents) ||
+      cents <= 0 || cents > 99999999900) {
+    alert("金额不正确");
+    return;
+  }
+
+  const date = el("date").value;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    alert("请选择有效日期");
+    return;
+  }
+
+  const original = records.slice();
+  const existing = records.find(r=>r.id===editing);
+
+  const record = {
+    id: editing || crypto.randomUUID(),
+    kind,
+    cents,
+    category:el("category").value,
+    date,
+    note:el("note").value.trim(),
+    created:existing?.created || Date.now()
+  };
+
+  if (editing) {
+    records = records.map(r=>r.id===editing?record:r);
+  } else {
+    records.push(record);
+  }
+
+  if (!persist()) {
+    records = original;
+    return;
+  }
+
+  month = new Date(
+    Number(date.slice(0,4)),
+    Number(date.slice(5,7))-1,1
+  );
+  resetForm();
+  page("home");
+};
+
+function deleteRecord() {
+  if (!editing || !confirm("确定删除这笔账单吗？")) return;
+
+  const old = records.slice();
+  records = records.filter(r=>r.id!==editing);
+
+  if (!persist()) {
+    records = old;
+    return;
+  }
+  resetForm();
+  page("records");
+}
+
+function download(name,type,content) {
+  const url = URL.createObjectURL(
+    new Blob([content],{type})
+  );
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),10000);
+}
+
+function exportJSON() {
+  download(
+    "记账备份-"+today()+".json",
+    "application/json",
+    JSON.stringify({
+      version:1,
+      exportDate:new Date().toISOString(),
+      records
+    },null,2)
+  );
+}
+
+function exportCSV() {
+  const quote = value =>
+    '"' + String(value).replace(/"/g,'""') + '"';
+
+  const rows = [
+    ["日期","类型","分类","金额","备注"],
+    ...records.map(r=>[
+      r.date,
+      r.kind==="income"?"收入":"支出",
+      r.category,
+      (r.cents/100).toFixed(2),
+      r.note
+    ])
+  ];
+
+  download(
+    "记账明细-"+today()+".csv",
+    "text/csv;charset=utf-8",
+    "\ufeff"+rows.map(r=>r.map(quote).join(",")).join("\r\n")
+  );
+}
+
+async function importJSON(event) {
+  const file = event.target.files[0];
+  event.target.value = "";
+  if (!file) return;
+
+  try {
+    const data = JSON.parse(await file.text());
+    if (!Array.isArray(data.records) ||
+        data.records.length > 10000 ||
+        !data.records.every(validRecord)) {
+      throw Error("备份格式不正确");
+    }
+
+    if (!confirm("导入将替换本机账本，确定继续？")) return;
+
+    const old = records;
+    records = data.records;
+
+    if (!persist()) {
+      records = old;
+      return;
+    }
+    render();
+    alert("导入成功");
+  } catch(e) {
+    alert("导入失败：" + e.message);
+  }
+}
+
+function clearAll() {
+  if (!confirm("确定清空本机所有账单吗？")) return;
+  if (!confirm("请确认已经做好备份。继续？")) return;
+
+  const old = records;
+  records = [];
+  if (!persist()) {
+    records = old;
+    return;
+  }
+  render();
+}
+
+// =======================================
+// GitHub Cloud Sync
+// =======================================
+
+let cloudPassword = "";
+let cloudConnected = false;
+let cloudBusy = false;
+let cloudConflict = false;
+let remoteLedger = null;
+let cloudTimer = null;
+
+let cloudMeta = {sha:null,snapshot:null};
+
+try {
+  const meta = JSON.parse(
+    localStorage.getItem(META_KEY) || "null"
+  );
+  if (meta && typeof meta === "object") {
+    cloudMeta = meta;
+  }
+} catch(e) {}
+
+function snapshot() {
+  return JSON.stringify(records);
+}
+
+function saveMeta() {
+  try {
+    localStorage.setItem(
+      META_KEY,JSON.stringify(cloudMeta)
+    );
+  } catch(e) {
+    console.warn("同步元数据保存失败",e);
+  }
+}
+
+function cloudStatus(text) {
+  el("cloudStatus").textContent = text;
+}
+
+function cloudControls(first) {
+  el("cloudActions").hidden = !first;
+  el("syncBtn").hidden = first;
+}
+
+async function cloudRequest(method,body) {
+  const controller = new AbortController();
+  const timer = setTimeout(
+    ()=>controller.abort(),20000
+  );
+
+  try {
+    const response = await fetch(CLOUD_URL,{
+      method,
+      mode:"cors",
+      cache:"no-store",
+      signal:controller.signal,
+      headers:{
+        Authorization:"Bearer "+cloudPassword,
+        "Content-Type":"application/json"
+      },
+      ...(body === undefined ? {} :
+        {body:JSON.stringify(body)})
+    });
+
+    let data = {};
+    try {
+      data = await response.json();
+    } catch(e) {}
+
+    if (!response.ok) {
+      const error = new Error(
+        data.error || "HTTP "+response.status
+      );
+      error.status = response.status;
+      throw error;
+    }
+
+    return data;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function cloudError(error) {
+  if (error.status === 409) {
+    cloudConflict = true;
+    cloudStatus(
+      "⚠️ 云端版本冲突，自动同步已暂停。" +
+      "请先导出本机备份，再重新连接处理。"
+    );
+  } else if (error.status === 401) {
+    cloudConnected = false;
+    cloudStatus("同步密码错误，请重新输入");
+  } else {
+    cloudStatus(
+      "⚠️ 同步失败，本机记录保留：" + error.message
+    );
+  }
+}
+
+async function connectCloud() {
+  if (cloudBusy) return;
+
+  const password = el("cloudPassword").value;
+  if (!password) {
+    alert("请输入同步密码");
+    return;
+  }
+
+  cloudPassword = password;
+  cloudBusy = true;
+  cloudConflict = false;
+  cloudConnected = false;
+
+  cloudStatus("正在连接 GitHub…");
+
+  try {
+    remoteLedger = await cloudRequest("GET");
+
+    if (!Array.isArray(remoteLedger.records) ||
+        !("sha" in remoteLedger)) {
+      throw Error("云端数据格式错误");
+    }
+
+    cloudConnected = true;
+
+    if (cloudMeta.snapshot !== null &&
+        cloudMeta.snapshot !== undefined) {
+      cloudControls(false);
+      cloudStatus("✅ 连接成功，正在检查差异");
+    } else {
+      cloudControls(true);
+      cloudStatus(
+        "✅ 云端 " + remoteLedger.records.length +
+        " 笔，本机 " + records.length +
+        " 笔。请选择首次同步方式。"
+      );
+    }
+  } catch(e) {
+    cloudError(e);
+  } finally {
+    cloudBusy = false;
+  }
+
+  if (cloudConnected &&
+      cloudMeta.snapshot !== null &&
+      cloudMeta.snapshot !== undefined) {
+    await syncCloud();
+  }
+}
+
+async function uploadWithSha(sha) {
+  const copy = snapshot();
+
+  const result = await cloudRequest("PUT",{
+    sha,
+    records:JSON.parse(copy)
+  });
+
+  if (!result.ok || !result.sha) {
+    throw Error("云端未确认保存成功");
+  }
+
+  cloudMeta = {
+    sha:result.sha,
+    snapshot:copy
+  };
+  saveMeta();
+
+  remoteLedger = {
+    sha:result.sha,
+    records:JSON.parse(copy)
+  };
+
+  cloudStatus(
+    "✅ 已同步到 GitHub · "+
+    new Date().toLocaleTimeString("zh-CN")
+  );
+
+  if (snapshot() !== copy) {
+    queueCloudSync();
+  }
+}
+
+async function firstUpload() {
+  if (!cloudConnected || cloudBusy || !remoteLedger) return;
+
+  if (!confirm(
+    "将本机 " + records.length +
+    " 笔账单上传，覆盖云端 " +
+    remoteLedger.records.length +
+    " 笔账单？请确认已经备份。"
+  )) return;
+
+  cloudBusy = true;
+  cloudStatus("正在上传…");
+
+  try {
+    await uploadWithSha(remoteLedger.sha);
+    cloudControls(false);
+  } catch(e) {
+    cloudError(e);
+  } finally {
+    cloudBusy = false;
+  }
+}
+
+async function restoreCloud() {
+  if (!cloudConnected || cloudBusy) return;
+
+  if (!confirm(
+    "云端记录将替换本机全部账单。" +
+    "请确认已经导出本机备份。"
+  )) return;
+
+  cloudBusy = true;
+
+  try {
+    const latest = await cloudRequest("GET");
+    const old = records;
+
+    records = latest.records;
+
+    if (!persist()) {
+      records = old;
+      return;
+    }
+
+    cloudMeta = {
+      sha:latest.sha,
+      snapshot:snapshot()
+    };
+    saveMeta();
+
+    remoteLedger = latest;
+    render();
+    cloudControls(false);
+
+    cloudStatus(
+      "✅ 已恢复云端 " + records.length + " 笔账单"
+    );
+  } catch(e) {
+    cloudError(e);
+  } finally {
+    cloudBusy = false;
+  }
+}
+
+async function mergeCloud() {
+  if (!cloudConnected || cloudBusy) return;
+
+  if (!confirm(
+    "合并时，相同 ID 的账单优先保留本机版本。" +
+    "删除过的记录可能重新出现。" +
+    "请确保已经备份，继续吗？"
+  )) return;
+
+  cloudBusy = true;
+
+  try {
+    const latest = await cloudRequest("GET");
+
+    const map = new Map(
+      latest.records.map(r=>[r.id,r])
+    );
+
+    records.forEach(r=>map.set(r.id,r));
+
+    const old = records;
+    records = [...map.values()];
+
+    if (!persist()) {
+      records = old;
+      return;
+    }
+
+    await uploadWithSha(latest.sha);
+    cloudControls(false);
+    cloudConflict = false;
+    render();
+  } catch(e) {
+    cloudError(e);
+  } finally {
+    cloudBusy = false;
+  }
+}
+
+function queueCloudSync() {
+  if (!cloudConnected || cloudConflict) return;
+
+  clearTimeout(cloudTimer);
+  cloudTimer = setTimeout(()=>{
+    if (cloudBusy) {
+      queueCloudSync();
+    } else {
+      syncCloud();
+    }
+  },900);
+}
+
+async function syncCloud() {
+  if (!cloudConnected || cloudBusy || cloudConflict) return;
+
+  if (cloudMeta.snapshot === null ||
+      cloudMeta.snapshot === undefined) {
+    cloudControls(true);
+    cloudStatus("请选择首次同步方式");
+    return;
+  }
+
+  cloudBusy = true;
+  cloudStatus("正在检查云端…");
+
+  try {
+    const latest = await cloudRequest("GET");
+
+    const localChanged =
+      snapshot() !== cloudMeta.snapshot;
+
+    const remoteChanged =
+      latest.sha !== cloudMeta.sha;
+
+    if (localChanged && remoteChanged) {
+      cloudConflict = true;
+      remoteLedger = latest;
+      cloudControls(true);
+
+      cloudStatus(
+        "⚠️ 本机和云端都有新改动。" +
+        "自动同步已停止，请备份后手动处理。"
+      );
+      return;
+    }
+
+    if (remoteChanged) {
+      const old = records;
+      records = latest.records;
+
+      if (!persist()) {
+        records = old;
+        return;
+      }
+
+      cloudMeta = {
+        sha:latest.sha,
+        snapshot:snapshot()
+      };
+      saveMeta();
+
+      remoteLedger = latest;
+      render();
+
+      cloudStatus(
+        "✅ 已从 GitHub 更新 " +
+        records.length + " 笔账单"
+      );
+    } else if (localChanged) {
+      await uploadWithSha(latest.sha);
+    } else {
+      cloudStatus(
+        "✅ 本机与 GitHub 已同步 · " +
+        new Date().toLocaleTimeString("zh-CN")
+      );
+    }
+  } catch(e) {
+    cloudError(e);
+  } finally {
+    cloudBusy = false;
+  }
+}
+
+window.addEventListener("online",()=>{
+  if (cloudConnected) queueCloudSync();
+});
+
+document.addEventListener("visibilitychange",()=>{
+  if (!document.hidden && cloudConnected) {
+    syncCloud();
+  }
+});
+
+// 初始化
+resetForm();
+render();
 </script>
-</body></html>
+</body>
+</html>
