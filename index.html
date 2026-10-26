@@ -33,6 +33,7 @@ h3{font-size:16px;margin:0}
  background:linear-gradient(135deg,#1e3159,#476cbd)
 }
 .hero .muted{color:#cbdaf3}
+.hero .outline{background:#ffffff20;color:white}
 .balance{font-size:34px;font-weight:800;margin:12px 0 22px}
 .summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .summary>div{padding:12px;border-radius:12px;background:#ffffff20}
@@ -154,7 +155,10 @@ h3{font-size:16px;margin:0}
 
 <section id="home" class="page active">
 <div class="hero">
+<div class="row">
 <div class="muted">总资产 · 人民币折算</div>
+<button type="button" class="outline" id="homePrivacyBtn" data-privacy-toggle onclick="togglePrivacy()">👁 隐藏</button>
+</div>
 <div class="balance" id="totalAssets">¥0.00</div>
 <div class="summary">
 <div>
@@ -182,7 +186,10 @@ h3{font-size:16px;margin:0}
 <p class="hint" id="assetHint"></p>
 </div>
 
-<div class="section"><h3>账户资产</h3></div>
+<div class="section">
+<h3>账户资产</h3>
+<button type="button" class="smallbtn" id="homeAccountsPrivacyBtn" data-privacy-toggle onclick="togglePrivacy()">👁 隐藏</button>
+</div>
 <div id="homeAssets"></div>
 
 <div class="section">
@@ -196,7 +203,7 @@ h3{font-size:16px;margin:0}
 <div class="row">
 <h2>资产目录</h2>
 <div class="row">
-<button class="outline" id="privacyBtn" onclick="togglePrivacy()">👁 隐藏</button>
+<button type="button" class="outline" id="privacyBtn" data-privacy-toggle onclick="togglePrivacy()">👁 隐藏</button>
 <button class="primary" onclick="addAccount()">+ 父级</button>
 </div>
 </div>
@@ -703,8 +710,9 @@ function parentDisplay(a){
 
 function togglePrivacy(){
  assetHidden=!assetHidden;
- localStorage.setItem(PRIVACY_KEY,String(assetHidden));
- renderAssets();
+ try{localStorage.setItem(PRIVACY_KEY,String(assetHidden))}
+ catch{}
+ render();
 }
 
 function currencyPrompt(message,initial="CNY"){
@@ -1115,7 +1123,12 @@ function renderAssets(){
  list.replaceChildren();
  home.replaceChildren();
 
- el("privacyBtn").textContent=assetHidden?"🙈 显示":"👁 隐藏";
+ document.querySelectorAll("[data-privacy-toggle]").forEach(button=>{
+  button.textContent=assetHidden?"🙈 显示":"👁 隐藏";
+  button.setAttribute("aria-pressed",String(assetHidden));
+  button.setAttribute("aria-label",assetHidden?
+   "显示资产及首页收支金额":"隐藏资产及首页收支金额");
+ });
 
  if(!accounts.length){
   list.innerHTML='<div class="empty">暂无资产账户</div>';
@@ -1202,8 +1215,7 @@ function renderAssets(){
    a.name,
    a.mode==="multi"?"多币种 · 人民币估值":
     a.currency+" · 原币",
-   a.mode==="multi"?formatYuan(parentYuan(a)):
-    parentDisplay(a),
+   parentDisplay(a),
    ()=>showPage("assets")
   ));
  });
@@ -1284,11 +1296,10 @@ function renderRecords(){
   return convertParts(parts);
  };
 
- el("homeIncome").textContent=
-  el("statIncome").textContent=formatYuan(calculate("income"));
-
- el("homeExpense").textContent=
-  el("statExpense").textContent=formatYuan(calculate("expense"));
+ el("statIncome").textContent=formatYuan(calculate("income"));
+ el("statExpense").textContent=formatYuan(calculate("expense"));
+ el("homeIncome").textContent=assetHidden?"••••••":el("statIncome").textContent;
+ el("homeExpense").textContent=assetHidden?"••••••":el("statExpense").textContent;
 
  const list=el("allRecords");
  list.replaceChildren();
@@ -1401,7 +1412,7 @@ function renderMovements(){
 }
 
 function render(){
- el("totalAssets").textContent=formatYuan(totalYuan());
+ el("totalAssets").textContent=assetHidden?"••••••":formatYuan(totalYuan());
  renderRate();
  renderAssets();
  renderDonut();
@@ -1906,3 +1917,4 @@ try{
 </script>
 </body>
 </html>
+
