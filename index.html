@@ -7,158 +7,336 @@
 <meta name="theme-color" content="#f4f7fc">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="随手记账">
-<title>随手记账 V1.2</title>
+<title>随手记账 V1.3</title>
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;color:#25344f;background:#f4f7fc}
+:root{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
+  background:#f4f7fc;color:#20304b
+}
 *{box-sizing:border-box}
 body{margin:0}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-.app{max-width:520px;margin:auto;padding:calc(20px + env(safe-area-inset-top)) 18px calc(105px + env(safe-area-inset-bottom))}
+.app{
+  max-width:520px;margin:auto;
+  padding:calc(20px + env(safe-area-inset-top)) 17px
+  calc(110px + env(safe-area-inset-bottom))
+}
 header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-h1{font-size:24px;margin:0}
-h2{font-size:20px}
-h3{font-size:16px;margin:0 0 12px}
-.muted{font-size:12px;color:#8a97aa}
-.hero{background:linear-gradient(135deg,#243b7e,#4267bd);border-radius:24px;color:white;padding:24px}
-.hero .muted{color:#d4def5}
+h1{font-size:23px;margin:0}
+h2{font-size:21px;margin:5px 0 18px}
+h3{font-size:16px;margin:0}
+.muted{font-size:12px;color:#8896aa}
+.hero{
+  border-radius:23px;padding:23px;color:white;
+  background:linear-gradient(135deg,#1d315c,#4266b5);
+  box-shadow:0 12px 25px #294b9730
+}
+.hero .muted{color:#cedbf5}
 .balance{font-size:36px;font-weight:800;margin:12px 0 22px}
 .summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.summary>div{background:#ffffff20;border-radius:13px;padding:12px}
-.summary strong{display:block;margin-top:7px}
-.card,.entry{background:white;border-radius:18px;padding:16px;margin:12px 0}
-.section{margin:24px 0 12px;display:flex;justify-content:space-between;align-items:center}
-.entry{display:flex;align-items:center;gap:12px;cursor:pointer}
-.emoji{width:42px;height:42px;background:#f0f4fc;border-radius:12px;display:grid;place-items:center;font-size:21px;flex-shrink:0}
-.info{flex:1;min-width:0}
-.info small{display:block;color:#8995a8;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.money{font-weight:750;white-space:nowrap}
-.income{color:#16a77d}
-.field{margin:16px 0}
-.field label{font-size:14px;font-weight:700;display:block;margin-bottom:8px}
-.field input,.field select,.field textarea{width:100%;border:1px solid #e2e9f4;border-radius:12px;padding:13px;color:#25344f;background:white}
-.primary,.outline,.danger{border-radius:13px;padding:13px 15px;font-weight:700;border:0}
-.primary{background:#4569bf;color:white}
-.outline{background:#f4f7fc;color:#3d5f9e;border:1px solid #e2e8f2}
-.danger{background:#fff0f1;color:#dc4758}
-.full{display:block;width:100%;margin-top:10px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.summary>div{
+  border-radius:12px;background:#ffffff18;padding:12px
+}
+.summary strong{display:block;margin-top:6px}
+.card{
+  background:white;border-radius:18px;
+  padding:17px;margin:13px 0;
+  box-shadow:0 4px 16px #20345b08
+}
+.section{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:25px 0 12px
+}
+.primary,.outline,.danger{
+  border-radius:12px;padding:12px 15px;
+  font-size:14px;font-weight:700;border:0
+}
+.primary{background:#4669bc;color:white}
+.outline{background:#f2f5fb;color:#375caa;border:1px solid #e3e9f3}
+.danger{background:#fff0f2;color:#d8485e}
+.full{width:100%;margin-top:10px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.field{margin:15px 0}
+.field label{
+  display:block;font-size:13px;font-weight:700;margin-bottom:8px
+}
+.field input,.field select,.field textarea{
+  background:white;border:1px solid #e1e8f3;
+  color:#243550;border-radius:12px;
+  padding:13px;width:100%;outline:none
+}
+.field input:focus,.field select:focus{
+  border-color:#6287d6
+}
+.tabs{
+  position:fixed;bottom:0;left:0;right:0;
+  max-width:520px;margin:auto;
+  display:flex;justify-content:space-around;
+  background:#fffffff2;backdrop-filter:blur(16px);
+  border-top:1px solid #e8edf6;
+  padding:11px 2px calc(14px + env(safe-area-inset-bottom));
+  z-index:10
+}
+.tab{
+  background:none;border:0;
+  color:#8e9aae;font-size:11px;
+  width:19%;display:flex;flex-direction:column;
+  align-items:center;gap:4px
+}
+.tab span{font-size:21px}
+.tab.active{color:#4268bb;font-weight:800}
 .page{display:none}
 .page.active{display:block}
-.tabs{position:fixed;bottom:0;left:0;right:0;margin:auto;max-width:520px;display:flex;justify-content:space-around;background:#fffffff2;backdrop-filter:blur(16px);border-top:1px solid #e7ecf5;padding:12px 5px calc(14px + env(safe-area-inset-bottom))}
-.tab{border:0;background:none;color:#8b98ad;font-size:12px;width:24%;display:flex;flex-direction:column;align-items:center;gap:4px}
-.tab span{font-size:22px}
-.tab.active{color:#4267bd;font-weight:800}
-.monthbar{display:flex;justify-content:space-between;align-items:center;margin:16px 0}
-.monthbar button{border:0;background:white;border-radius:9px;padding:9px}
-.toggle{display:flex;gap:10px;margin:18px 0}
+.status{
+  padding:12px;border-radius:12px;background:#eaf0fc;
+  color:#34578c;font-size:12px;line-height:1.7;
+  margin:13px 0;overflow-wrap:anywhere
+}
+.hint{color:#8592a6;font-size:12px;line-height:1.8}
+.entry{
+  background:white;border-radius:15px;padding:13px;
+  display:flex;align-items:center;gap:11px;
+  margin:8px 0
+}
+.emoji{
+  width:42px;height:42px;flex-shrink:0;
+  background:#f1f5fc;border-radius:12px;
+  display:grid;place-items:center;font-size:21px
+}
+.entryinfo{flex:1;min-width:0}
+.entryinfo small{
+  color:#8795a9;display:block;
+  margin-top:5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis
+}
+.money{font-weight:750;white-space:nowrap;font-size:14px}
+.income{color:#16a77d}
+.empty{color:#95a0b0;text-align:center;padding:30px 10px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.assetHead{display:flex;align-items:center;gap:10px}
+.assetIcon{
+  width:42px;height:42px;border-radius:12px;
+  background:#edf3ff;display:grid;place-items:center;font-size:20px
+}
+.assetParent{padding:15px;background:white;border-radius:16px;margin:10px 0}
+.child{
+  padding:12px 4px 12px 18px;
+  display:flex;justify-content:space-between;
+  border-top:1px solid #f0f2f7;font-size:13px
+}
+.smallbtn{
+  font-size:12px;border:0;background:#edf2fb;
+  color:#4565a3;border-radius:9px;padding:8px 10px
+}
+.chartRow{display:flex;gap:16px;align-items:center}
+.donut{
+  width:174px;aspect-ratio:1;border-radius:50%;
+  background:#e9edf5;position:relative;flex-shrink:0
+}
+.donut:before{
+  content:"";position:absolute;inset:27%;
+  border-radius:50%;background:white
+}
+.legend{flex:1;min-width:0}
+.legendRow{
+  display:flex;gap:7px;align-items:center;
+  margin:10px 0;font-size:12px
+}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.legendName{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.monthbar{
+  display:flex;justify-content:space-between;
+  align-items:center;margin:14px 0
+}
+.monthbar button{
+  background:white;border:0;padding:10px;
+  border-radius:9px;color:#4365ae
+}
+.toggle{display:flex;gap:8px;margin:14px 0}
 .toggle button{flex:1}
-.selected{background:#4569bf;color:white}
-.status{padding:13px;border-radius:12px;background:#eaf0fc;color:#36568d;font-size:13px;line-height:1.7;margin:12px 0;overflow-wrap:anywhere}
-.hint{font-size:12px;color:#8291a7;line-height:1.8}
-.bar{height:9px;border-radius:10px;background:#edf1f8;overflow:hidden;margin-top:8px}
-.bar>div{height:100%;background:#6a8ce1}
-.stat{margin:16px 0}
-.empty{text-align:center;padding:35px 10px;color:#8995a8}
+.selected{background:#476abc;color:white}
+.bar{
+  height:9px;background:#eef1f8;
+  border-radius:10px;overflow:hidden;margin-top:7px
+}
+.bar>div{height:100%;background:#6b8ee4}
+.stat{margin:14px 0}
 [hidden]{display:none!important}
+@media(max-width:370px){
+ .donut{width:135px}
+ .balance{font-size:31px}
+}
 </style>
 </head>
 <body>
+
 <main class="app">
 <header>
 <div>
 <h1>✦ 随手记账</h1>
-<div class="muted">V1.2 · GitHub 自动云同步</div>
+<div class="muted">V1.3 · 个人资产管理</div>
 </div>
-<button class="outline" onclick="page('settings')">⚙️</button>
+<button class="outline" onclick="showPage('settings')">⚙️</button>
 </header>
 
-<section id="home" class="page active">
+<section class="page active" id="home">
 <div class="hero">
-<div class="muted">本月结余 · <span id="homeMonth"></span></div>
-<div class="balance" id="balance">¥0.00</div>
+<div class="muted">当前总资产</div>
+<div class="balance" id="totalAssets">¥0.00</div>
 <div class="summary">
-<div><span class="muted">本月收入</span><strong id="homeIncome">¥0.00</strong></div>
-<div><span class="muted">本月支出</span><strong id="homeExpense">¥0.00</strong></div>
+<div>
+<span class="muted">本月收入</span>
+<strong id="homeIncome">¥0.00</strong>
+</div>
+<div>
+<span class="muted">本月支出</span>
+<strong id="homeExpense">¥0.00</strong>
 </div>
 </div>
-<div class="status" id="homeCloudStatus" role="status">☁️ 未连接 · 本机账单正常</div>
-<div class="section"><h3>最近账单</h3><button class="outline" onclick="page('records')">查看全部</button></div>
+</div>
+
+<div class="status" id="homeCloudStatus">
+☁️ 未连接 · 本地账单正常
+</div>
+
+<div class="section">
+<h3>资产分布</h3>
+<button class="smallbtn" onclick="showPage('assets')">管理资产</button>
+</div>
+
+<div class="card">
+<div class="chartRow">
+<div class="donut" id="donut"></div>
+<div class="legend" id="legend"></div>
+</div>
+<p class="hint" id="assetHint"></p>
+</div>
+
+<div class="section"><h3>账户资产</h3></div>
+<div id="homeAssets"></div>
+
+<div class="section">
+<h3>最近收支</h3>
+<button class="smallbtn" onclick="showPage('records')">查看全部</button>
+</div>
 <div id="recent"></div>
 </section>
 
-<section id="records" class="page">
-<h2>全部账单</h2>
+<section class="page" id="assets">
+<div class="row">
+<h2>资产目录</h2>
+<button class="primary" onclick="addAccount()">+ 父级账户</button>
+</div>
+<p class="hint">
+先建立券商、银行等父级账户，再添加股票、现金等子级。
+有子级时父级总额自动按子级合计计算。
+金额是期初余额，之后的收支变动自动叠加。
+</p>
+<div id="assetList"></div>
+</section>
+
+<section class="page" id="add">
+<h2 id="formTitle">收支记账</h2>
+<div class="toggle">
+<button class="outline selected" id="expenseBtn" onclick="setKind('expense')">支出</button>
+<button class="outline" id="incomeBtn" onclick="setKind('income')">收入</button>
+</div>
+<form id="entryForm">
+<div class="field">
+<label>金额（元）</label>
+<input id="amount" type="number" step="0.01"
+min="0.01" max="999999999" inputmode="decimal" required>
+</div>
+<div class="field">
+<label>分类</label>
+<select id="category"></select>
+</div>
+<div class="field">
+<label>资金归属账户（必选）</label>
+<select id="accountSelect" required></select>
+</div>
+<div class="field">
+<label>日期</label>
+<input id="date" type="date" required>
+</div>
+<div class="field">
+<label>备注</label>
+<textarea id="note" rows="2" maxlength="100"></textarea>
+</div>
+<button class="primary full" type="submit">保存账单</button>
+<button class="danger full" type="button"
+id="deleteBtn" hidden onclick="deleteRecord()">删除账单</button>
+<button class="outline full" type="button"
+onclick="resetForm();showPage('records')">取消</button>
+</form>
+</section>
+
+<section class="page" id="records">
+<h2>收入与消费</h2>
 <div class="monthbar">
 <button onclick="moveMonth(-1)">‹ 上月</button>
 <strong id="listMonth"></strong>
 <button onclick="moveMonth(1)">下月 ›</button>
 </div>
-<div id="allRecords"></div>
-</section>
-
-<section id="add" class="page">
-<h2 id="formTitle">记一笔</h2>
-<div class="toggle">
-<button id="expenseBtn" class="outline selected" onclick="setKind('expense')">支出</button>
-<button id="incomeBtn" class="outline" onclick="setKind('income')">收入</button>
-</div>
-<form id="entryForm">
-<div class="field"><label>金额（元）</label><input id="amount" type="number" inputmode="decimal" min="0.01" max="999999999" step="0.01" required></div>
-<div class="field"><label>分类</label><select id="category"></select></div>
-<div class="field"><label>日期</label><input id="date" type="date" required></div>
-<div class="field"><label>备注</label><textarea id="note" rows="2" maxlength="100"></textarea></div>
-<button class="primary full" type="submit">保存账单</button>
-<button id="deleteBtn" type="button" class="danger full" hidden onclick="deleteRecord()">删除账单</button>
-<button type="button" class="outline full" onclick="resetForm();page('records')">取消</button>
-</form>
-</section>
-
-<section id="stats" class="page">
-<h2>收支统计</h2>
-<div class="monthbar">
-<button onclick="moveMonth(-1)">‹ 上月</button>
-<strong id="statMonth"></strong>
-<button onclick="moveMonth(1)">下月 ›</button>
-</div>
 <div class="card">
 <div class="two">
-<div>收入<strong id="statIncome" style="display:block"></strong></div>
-<div>支出<strong id="statExpense" style="display:block"></strong></div>
+<div>
+<div class="muted">当月收入</div>
+<strong id="statIncome">¥0.00</strong>
+</div>
+<div>
+<div class="muted">当月消费</div>
+<strong id="statExpense">¥0.00</strong>
 </div>
 </div>
-<h3>分类支出</h3>
+</div>
+<div class="section">
+<h3>收支明细</h3>
+<button class="smallbtn" onclick="resetForm();showPage('add')">+ 记一笔</button>
+</div>
+<div id="allRecords"></div>
+<div class="section"><h3>消费分类占比</h3></div>
 <div class="card" id="breakdown"></div>
 </section>
 
-<section id="settings" class="page">
+<section class="page" id="settings">
 <h2>设置与备份</h2>
 <div class="card">
-<h3>本地数据备份</h3>
-<p class="hint">建议定期导出 JSON 并保存到 iCloud Drive。</p>
+<h3>本地备份</h3>
+<p class="hint">V1.3 的 JSON 备份同时包含收支记录和资产目录。</p>
 <div class="two">
 <button class="outline" onclick="exportJSON()">导出 JSON</button>
 <button class="outline" onclick="document.getElementById('importFile').click()">导入 JSON</button>
 </div>
-<input id="importFile" type="file" accept=".json,application/json" hidden onchange="importJSON(event)">
-<button class="outline full" onclick="exportCSV()">导出 CSV</button>
+<input id="importFile" hidden type="file"
+accept=".json,application/json" onchange="importJSON(event)">
+<button class="outline full" onclick="exportCSV()">导出收支 CSV</button>
 </div>
 
 <div class="card">
-<h3>☁️ GitHub 云同步</h3>
-<p class="hint">数据通过 Cloudflare Worker 写入 GitHub 私有仓库。首次连接先选择上传、恢复或合并。</p>
+<h3>☁️ GitHub 云端同步</h3>
+<p class="hint">
+V1.3 同时同步收支账单和资产目录。
+首次升级到此版本时，请检查云端和本机数据后选择操作。
+</p>
 <div class="field">
 <label>同步密码</label>
-<input type="password" id="cloudPassword" autocomplete="off" placeholder="输入 SYNC_PASSWORD">
+<input id="cloudPassword" type="password"
+autocomplete="off" placeholder="输入 SYNC_PASSWORD">
 </div>
 <label style="display:flex;gap:9px;font-size:13px;line-height:1.6">
 <input id="rememberCloud" type="checkbox">
-在此设备记住密码，打开软件时自动连接
+在当前设备记住密码，自动连接
 </label>
-<p class="hint">开启后密码会保存在当前网站的本地存储中。仅建议用于个人可信设备，不具备系统钥匙串的安全保护。</p>
+<p class="hint">
+记住密码会将密码保存在本机网站存储中。
+仅适合个人可信设备。
+</p>
 <button class="primary full" onclick="connectCloud()">连接并检查云端</button>
-<button class="outline full" onclick="forgetPassword()">清除记住的密码</button>
-<div class="status" id="cloudStatus" role="status">未连接 · 本机账单正常</div>
+<button class="outline full" onclick="forgetPassword()">清除保存的密码</button>
+<div class="status" id="cloudStatus">未连接</div>
+
 <div id="cloudActions" hidden>
 <div class="two">
 <button class="outline" onclick="uploadFirst()">上传本机</button>
@@ -166,36 +344,62 @@ h3{font-size:16px;margin:0 0 12px}
 </div>
 <button class="outline full" onclick="mergeCloud()">合并两边账单</button>
 </div>
-<button id="syncBtn" class="outline full" hidden onclick="syncCloud()">立即检查并同步</button>
-<p class="hint">离线时仍可记账。若本机和云端同时发生变化，将暂停自动写入，避免无提示覆盖。</p>
+
+<button id="syncBtn" class="outline full" hidden
+onclick="syncCloud()">立即检查并同步</button>
 </div>
 
 <div class="card">
 <h3>其他操作</h3>
-<button class="danger full" onclick="clearAll()">清空本机账单</button>
+<button class="danger full" onclick="clearAll()">清空本机数据</button>
 </div>
+<p class="hint">
+随手记账 V1.3。
+总资产不重复计算父级与子级金额；
+历史未分配账户的旧收支不计入新资产期初余额。
+</p>
 </section>
 </main>
 
 <nav class="tabs">
-<button class="tab active" data-tab="home" onclick="page('home')"><span>⌂</span>首页</button>
-<button class="tab" data-tab="records" onclick="page('records')"><span>▤</span>账单</button>
-<button class="tab" data-tab="add" onclick="resetForm();page('add')"><span>⊕</span>记一笔</button>
-<button class="tab" data-tab="stats" onclick="page('stats')"><span>◉</span>统计</button>
+<button class="tab active" data-tab="home" onclick="showPage('home')">
+<span>⌂</span>首页
+</button>
+<button class="tab" data-tab="assets" onclick="showPage('assets')">
+<span>◈</span>资产
+</button>
+<button class="tab" data-tab="add" onclick="resetForm();showPage('add')">
+<span>⊕</span>记一笔
+</button>
+<button class="tab" data-tab="records" onclick="showPage('records')">
+<span>▤</span>收支
+</button>
+<button class="tab" data-tab="settings" onclick="showPage('settings')">
+<span>⚙</span>设置
+</button>
 </nav>
 
 <script>
 "use strict";
 
-const KEY = "myLedgerSingleHtmlV1";
-const META_KEY = "myLedgerCloudMetaV1";
-const PASSWORD_KEY = "myLedgerRememberedSyncPasswordV12";
-const CLOUD_URL =
+// 兼容旧版本
+const KEY="myLedgerSingleHtmlV1";
+const ASSET_KEY="myLedgerAssetsV13";
+const META_KEY="myLedgerCloudMetaV13";
+const PASSWORD_KEY="myLedgerRememberedSyncPasswordV12";
+
+const CLOUD_URL=
 "https://ledger-sync.l1154723176.workers.dev/ledger";
 
-const el = id => document.getElementById(id);
+const el=id=>document.getElementById(id);
 
-const categories = {
+const colors=[
+"#4A75D1","#40AD9D","#EDB15B",
+"#8A79CE","#E67F88","#56A8D6",
+"#9AB85D","#BB83B5"
+];
+
+const categories={
  expense:[
   ["餐饮","🍜"],["购物","🛍️"],["交通","🚕"],
   ["住房","🏠"],["娱乐","🎮"],["医疗","💊"],
@@ -208,51 +412,101 @@ const categories = {
 };
 
 function validRecord(r){
- return !!(r &&
+ return !!(
+  r &&
   typeof r.id==="string" &&
+  r.id.length<=128 &&
   (r.kind==="income"||r.kind==="expense") &&
   Number.isSafeInteger(r.cents) &&
-  r.cents>0 && r.cents<=99999999900 &&
+  r.cents>0 &&
+  r.cents<=99999999900 &&
   typeof r.category==="string" &&
   /^\d{4}-\d{2}-\d{2}$/.test(r.date) &&
-  typeof r.note==="string");
+  typeof r.note==="string"
+ );
+}
+
+function validAccount(a){
+ return !!(
+  a &&
+  typeof a.id==="string" &&
+  typeof a.name==="string" &&
+  Number.isSafeInteger(a.openingCents) &&
+  a.openingCents>=0 &&
+  Array.isArray(a.children) &&
+  a.children.every(c=>
+   c && typeof c.id==="string" &&
+   typeof c.name==="string" &&
+   Number.isSafeInteger(c.openingCents) &&
+   c.openingCents>=0
+  )
+ );
 }
 
 let records=[];
+let accounts=[];
+
 try{
  const data=JSON.parse(localStorage.getItem(KEY)||"[]");
  if(Array.isArray(data))records=data.filter(validRecord);
-}catch(e){console.error("本地账本读取失败",e)}
+}catch(e){console.warn("账单读取失败",e)}
 
-let kind="expense", editing=null;
+try{
+ const data=JSON.parse(localStorage.getItem(ASSET_KEY)||"[]");
+ if(Array.isArray(data))accounts=data.filter(validAccount);
+}catch(e){console.warn("资产读取失败",e)}
+
+let kind="expense",editing=null;
 let month=new Date();
 month.setDate(1);
 
-function money(cents){
- return "¥"+(cents/100).toLocaleString("zh-CN",{
-  minimumFractionDigits:2,maximumFractionDigits:2
- });
+function id(){
+ return crypto.randomUUID();
+}
+
+function money(n){
+ const abs=Math.abs(n);
+ return (n<0?"−":"")+"¥"+
+  (abs/100).toLocaleString("zh-CN",{
+   minimumFractionDigits:2,
+   maximumFractionDigits:2
+  });
+}
+
+function parseMoney(text,allowZero=false){
+ const s=String(text).trim();
+ if(!/^\d+(\.\d{1,2})?$/.test(s))return null;
+ const parts=s.split(".");
+ const value=Number(parts[0])*100+
+  Number((parts[1]||"").padEnd(2,"0"));
+ if(!Number.isSafeInteger(value)||
+    value<0||value>99999999900||
+    (!allowZero&&value===0))return null;
+ return value;
 }
 
 function today(){
  const d=new Date();
- return [d.getFullYear(),
- String(d.getMonth()+1).padStart(2,"0"),
- String(d.getDate()).padStart(2,"0")].join("-");
+ return [
+  d.getFullYear(),
+  String(d.getMonth()+1).padStart(2,"0"),
+  String(d.getDate()).padStart(2,"0")
+ ].join("-");
 }
 
 function persist(){
  try{
   localStorage.setItem(KEY,JSON.stringify(records));
-  queueCloudSync();
+  localStorage.setItem(ASSET_KEY,JSON.stringify(accounts));
+  queueSync();
   return true;
  }catch(e){
-  alert("本地保存失败，请检查存储空间");
+  alert("本地保存失败。请导出备份并检查存储空间。");
   return false;
  }
 }
 
-function page(name){
+function showPage(name){
  document.querySelectorAll(".page").forEach(p=>
   p.classList.toggle("active",p.id===name));
  document.querySelectorAll(".tab").forEach(t=>
@@ -261,243 +515,748 @@ function page(name){
  window.scrollTo(0,0);
 }
 
-function selectedRecords(){
+function monthlyRecords(){
  const prefix=month.getFullYear()+"-"+
   String(month.getMonth()+1).padStart(2,"0");
  return records.filter(r=>r.date.startsWith(prefix))
- .sort((a,b)=>b.date.localeCompare(a.date)||
-  (b.created||0)-(a.created||0));
+  .sort((a,b)=>b.date.localeCompare(a.date)||
+   (b.created||0)-(a.created||0));
 }
 
 function sum(items,type){
  return items.filter(r=>r.kind===type)
- .reduce((total,r)=>total+r.cents,0);
+  .reduce((n,r)=>n+r.cents,0);
 }
 
-function makeEntry(r){
- const row=document.createElement("div");
- row.className="entry";
- const emoji=document.createElement("div");
- emoji.className="emoji";
- emoji.textContent=
-  categories[r.kind].find(x=>x[0]===r.category)?.[1]||"💳";
- const info=document.createElement("div");
- info.className="info";
- const title=document.createElement("strong");
- title.textContent=r.category;
- const detail=document.createElement("small");
- detail.textContent=r.date+" "+r.note;
- info.append(title,detail);
- const amount=document.createElement("div");
- amount.className="money "+r.kind;
- amount.textContent=(r.kind==="income"?"+":"−")+money(r.cents);
- row.append(emoji,info,amount);
- row.onclick=()=>editRecord(r.id);
- return row;
-}
+// ========================================
+// 资产计算
+// ========================================
 
-function showList(id,items){
- const parent=el(id);
- parent.replaceChildren();
- if(!items.length){
-  const empty=document.createElement("div");
-  empty.className="empty";
-  empty.textContent="暂无账单，开始记一笔吧";
-  parent.append(empty);
-  return;
+function destinations(){
+ const result=[];
+ for(const a of accounts){
+  if(a.children.length){
+   for(const c of a.children){
+    result.push({
+     id:c.id,
+     name:a.name+" / "+c.name
+    });
+   }
+  }else{
+   result.push({id:a.id,name:a.name});
+  }
  }
- items.forEach(r=>parent.append(makeEntry(r)));
+ return result;
 }
 
-function render(){
- const data=selectedRecords();
- const income=sum(data,"income");
- const expense=sum(data,"expense");
- const label=month.getFullYear()+"年"+(month.getMonth()+1)+"月";
- ["homeMonth","listMonth","statMonth"].forEach(id=>
-  el(id).textContent=label);
- el("balance").textContent=
-  (income-expense<0?"−":"")+money(Math.abs(income-expense));
- el("homeIncome").textContent=money(income);
- el("homeExpense").textContent=money(expense);
- el("statIncome").textContent=money(income);
- el("statExpense").textContent=money(expense);
- showList("recent",data.slice(0,5));
- showList("allRecords",data);
+function accountDelta(accountId){
+ return records.reduce((total,r)=>{
+  if(r.accountId!==accountId)return total;
+  return total+(r.kind==="income"?r.cents:-r.cents);
+ },0);
+}
 
- const target=el("breakdown");
+function childBalance(c){
+ return c.openingCents+accountDelta(c.id);
+}
+
+function parentBalance(a){
+ if(a.children.length){
+  return a.children.reduce((sum,c)=>sum+childBalance(c),0);
+ }
+ return a.openingCents+accountDelta(a.id);
+}
+
+function totalBalance(){
+ return accounts.reduce((s,a)=>s+parentBalance(a),0);
+}
+
+function accountName(accountId){
+ if(!accountId)return "历史账单（未分配）";
+ return destinations().find(x=>x.id===accountId)?.name||
+  "未知账户";
+}
+
+function accountOptions(selectedId=""){
+ const target=el("accountSelect");
  target.replaceChildren();
- if(!expense){
-  target.textContent="本月暂无支出";
-  return;
+
+ const placeholder=document.createElement("option");
+ placeholder.value="";
+ placeholder.textContent="请选择资金账户";
+ target.append(placeholder);
+
+ for(const a of destinations()){
+  const option=document.createElement("option");
+  option.value=a.id;
+  option.textContent=a.name;
+  target.append(option);
  }
- const groups=new Map();
- data.filter(r=>r.kind==="expense").forEach(r=>
-  groups.set(r.category,(groups.get(r.category)||0)+r.cents));
- [...groups].sort((a,b)=>b[1]-a[1]).forEach(([name,value])=>{
-  const row=document.createElement("div");
-  row.className="stat";
-  const text=document.createElement("div");
-  const percent=value/expense*100;
-  text.textContent=name+" · "+money(value)+
-   " ("+percent.toFixed(1)+"%)";
-  const bar=document.createElement("div");
-  bar.className="bar";
-  const fill=document.createElement("div");
-  fill.style.width=percent+"%";
-  bar.append(fill);
-  row.append(text,bar);
-  target.append(row);
- });
+ target.value=selectedId;
 }
 
-function moveMonth(n){
- month.setMonth(month.getMonth()+n);
+function addAccount(){
+ const name=prompt("输入父级账户名称，例如：富途证券、银行卡");
+ if(name===null)return;
+ if(!name.trim()||name.trim().length>60){
+  alert("名称不能为空且不能超过60个字符");
+  return;
+ }
+
+ const input=prompt("输入该账户的当前期初余额（元）","0");
+ if(input===null)return;
+
+ const cents=parseMoney(input,true);
+ if(cents===null){
+  alert("金额格式错误");
+  return;
+ }
+
+ accounts.push({
+  id:id(),
+  name:name.trim(),
+  openingCents:cents,
+  children:[]
+ });
+
+ if(!persist()){accounts.pop();return}
  render();
 }
 
+function editAccount(accountId){
+ const a=accounts.find(x=>x.id===accountId);
+ if(!a)return;
+
+ const name=prompt("修改父级账户名称",a.name);
+ if(name===null)return;
+ if(!name.trim()||name.trim().length>60)return alert("名称无效");
+
+ const old=structuredClone(accounts);
+ a.name=name.trim();
+
+ if(!a.children.length){
+  const value=prompt(
+   "修改期初余额（元）。这不是新的收入记录。",
+   (a.openingCents/100).toFixed(2)
+  );
+  if(value===null){accounts=old;return}
+  const cents=parseMoney(value,true);
+  if(cents===null){accounts=old;return alert("金额无效")}
+  a.openingCents=cents;
+ }
+
+ if(!persist()){accounts=old;return}
+ render();
+}
+
+function addChild(accountId){
+ const a=accounts.find(x=>x.id===accountId);
+ if(!a)return;
+
+ const name=prompt("子级名称，例如：苹果股票、现金、基金");
+ if(name===null)return;
+ if(!name.trim()||name.trim().length>60){
+  alert("名称无效");
+  return;
+ }
+
+ const input=prompt("子级期初金额（元）","0");
+ if(input===null)return;
+ const cents=parseMoney(input,true);
+ if(cents===null)return alert("金额无效");
+
+ const oldAccounts=structuredClone(accounts);
+ const oldRecords=structuredClone(records);
+
+ // 首次添加子级，把旧父级余额转成「现金」子级，
+ // 并把原本记在父级的收支归到现金。
+ if(!a.children.length&&
+    (a.openingCents!==0||
+     records.some(r=>r.accountId===a.id))){
+  const cashId=id();
+  a.children.push({
+   id:cashId,
+   name:"现金",
+   openingCents:a.openingCents
+  });
+  records.forEach(r=>{
+   if(r.accountId===a.id)r.accountId=cashId;
+  });
+  a.openingCents=0;
+ }
+
+ a.children.push({
+  id:id(),
+  name:name.trim(),
+  openingCents:cents
+ });
+
+ if(!persist()){
+  accounts=oldAccounts;
+  records=oldRecords;
+  return;
+ }
+ render();
+}
+
+function editChild(parentId,childId){
+ const a=accounts.find(x=>x.id===parentId);
+ const c=a?.children.find(x=>x.id===childId);
+ if(!c)return;
+
+ const name=prompt("修改子级名称",c.name);
+ if(name===null)return;
+ if(!name.trim()||name.trim().length>60)return alert("名称无效");
+
+ const input=prompt("修改子级期初金额（元）",
+  (c.openingCents/100).toFixed(2));
+ if(input===null)return;
+
+ const cents=parseMoney(input,true);
+ if(cents===null)return alert("金额无效");
+
+ const old=structuredClone(accounts);
+ c.name=name.trim();
+ c.openingCents=cents;
+
+ if(!persist()){accounts=old;return}
+ render();
+}
+
+function deleteAsset(parentId,childId=null){
+ const a=accounts.find(x=>x.id===parentId);
+ if(!a)return;
+
+ const removedIds=childId?
+  [childId]:
+  [a.id,...a.children.map(c=>c.id)];
+
+ if(records.some(r=>removedIds.includes(r.accountId))){
+  alert("该资产已有收支记录。为防止账单失去归属，暂不允许删除。");
+  return;
+ }
+
+ if(!confirm("确定删除此资产目录吗？"))return;
+
+ const old=structuredClone(accounts);
+
+ if(childId){
+  a.children=a.children.filter(c=>c.id!==childId);
+ }else{
+  accounts=accounts.filter(x=>x.id!==parentId);
+ }
+
+ if(!persist()){accounts=old;return}
+ render();
+}
+
+function assetCard(a,index){
+ const root=document.createElement("div");
+ root.className="assetParent";
+
+ const head=document.createElement("div");
+ head.className="row";
+
+ const title=document.createElement("div");
+ title.className="assetHead";
+
+ const icon=document.createElement("div");
+ icon.className="assetIcon";
+ icon.textContent=["🏦","📈","💳","💰","🏠"][index%5];
+
+ const name=document.createElement("div");
+ const bold=document.createElement("strong");
+ bold.textContent=a.name;
+ const amount=document.createElement("div");
+ amount.className="muted";
+ amount.textContent=money(parentBalance(a));
+
+ name.append(bold,amount);
+ title.append(icon,name);
+
+ const edit=document.createElement("button");
+ edit.className="smallbtn";
+ edit.textContent="编辑";
+ edit.onclick=()=>editAccount(a.id);
+
+ head.append(title,edit);
+ root.append(head);
+
+ if(a.children.length){
+  const children=document.createElement("div");
+  children.style.marginTop="13px";
+
+  for(const c of a.children){
+   const row=document.createElement("div");
+   row.className="child";
+
+   const left=document.createElement("div");
+   left.textContent="└ "+c.name;
+   const right=document.createElement("div");
+   right.style.textAlign="right";
+
+   const value=document.createElement("strong");
+   value.textContent=money(childBalance(c));
+
+   const editBtn=document.createElement("button");
+   editBtn.className="smallbtn";
+   editBtn.style.marginLeft="8px";
+   editBtn.textContent="编辑";
+   editBtn.onclick=()=>editChild(a.id,c.id);
+
+   right.append(value,editBtn);
+   row.append(left,right);
+   children.append(row);
+  }
+  root.append(children);
+ }
+
+ const actions=document.createElement("div");
+ actions.className="row";
+ actions.style.marginTop="13px";
+
+ const add=document.createElement("button");
+ add.className="smallbtn";
+ add.textContent="+ 添加子级";
+ add.onclick=()=>addChild(a.id);
+
+ const remove=document.createElement("button");
+ remove.className="smallbtn";
+ remove.textContent="删除父级";
+ remove.onclick=()=>deleteAsset(a.id);
+
+ actions.append(add,remove);
+ root.append(actions);
+
+ return root;
+}
+
+function renderAssets(){
+ const target=el("assetList");
+ const home=el("homeAssets");
+ target.replaceChildren();
+ home.replaceChildren();
+
+ if(!accounts.length){
+  const empty=document.createElement("div");
+  empty.className="empty";
+  empty.textContent="暂无资产账户，请先新增父级账户";
+  target.append(empty);
+  home.append(empty.cloneNode(true));
+  return;
+ }
+
+ accounts.forEach((a,i)=>{
+  target.append(assetCard(a,i));
+  const row=document.createElement("div");
+  row.className="entry";
+
+  const icon=document.createElement("div");
+  icon.className="emoji";
+  icon.textContent=["🏦","📈","💳","💰","🏠"][i%5];
+
+  const info=document.createElement("div");
+  info.className="entryinfo";
+  const title=document.createElement("strong");
+  title.textContent=a.name;
+
+  const detail=document.createElement("small");
+  detail.textContent=a.children.length?
+   a.children.length+" 个子项目":"独立账户";
+  info.append(title,detail);
+
+  const amount=document.createElement("strong");
+  amount.className="money";
+  amount.textContent=money(parentBalance(a));
+
+  row.append(icon,info,amount);
+  row.onclick=()=>showPage("assets");
+  home.append(row);
+ });
+}
+
+function renderDonut(){
+ const donut=el("donut");
+ const legend=el("legend");
+ legend.replaceChildren();
+
+ const positive=accounts.map(a=>Math.max(parentBalance(a),0));
+ const sum=positive.reduce((a,b)=>a+b,0);
+ const net=totalBalance();
+
+ if(!sum){
+  donut.style.background="#e9edf5";
+  legend.textContent="暂无正资产";
+  el("assetHint").textContent="添加资产账户后自动显示占比。";
+  return;
+ }
+
+ let start=0;
+ const stops=[];
+
+ accounts.forEach((a,i)=>{
+  const v=positive[i];
+  if(!v)return;
+
+  const end=start+v/sum*100;
+  const color=colors[i%colors.length];
+  stops.push(`${color} ${start}% ${end}%`);
+
+  const row=document.createElement("div");
+  row.className="legendRow";
+
+  const dot=document.createElement("span");
+  dot.className="dot";
+  dot.style.background=color;
+
+  const name=document.createElement("span");
+  name.className="legendName";
+  name.textContent=a.name;
+
+  const percent=document.createElement("strong");
+  percent.textContent=(v/sum*100).toFixed(1)+"%";
+
+  row.append(dot,name,percent);
+  legend.append(row);
+  start=end;
+ });
+
+ donut.style.background="conic-gradient("+stops.join(",")+")";
+
+ el("assetHint").textContent=
+  net<sum?
+  "存在负余额账户，占比按正资产合计计算；顶部显示净资产。":
+  "占比按各父级资产合计计算，不重复统计子级。";
+}
+
+// ========================================
+// 收支记录
+// ========================================
+
 function setKind(value){
  kind=value;
- el("expenseBtn").classList.toggle("selected",kind==="expense");
- el("incomeBtn").classList.toggle("selected",kind==="income");
- const select=el("category"),old=select.value;
+ el("expenseBtn").classList.toggle("selected",value==="expense");
+ el("incomeBtn").classList.toggle("selected",value==="income");
+
+ const select=el("category");
  select.replaceChildren();
+
  categories[kind].forEach(([name,emoji])=>{
-  const option=document.createElement("option");
-  option.value=name;
-  option.textContent=emoji+" "+name;
-  select.append(option);
+  const op=document.createElement("option");
+  op.value=name;
+  op.textContent=emoji+" "+name;
+  select.append(op);
  });
- if(categories[kind].some(x=>x[0]===old))select.value=old;
 }
 
 function resetForm(){
  editing=null;
  el("entryForm").reset();
  el("date").value=today();
- el("formTitle").textContent="记一笔";
+ el("formTitle").textContent="收支记账";
  el("deleteBtn").hidden=true;
  setKind("expense");
+ accountOptions();
 }
 
-function editRecord(id){
- const r=records.find(x=>x.id===id);
+function editRecord(recordId){
+ const r=records.find(x=>x.id===recordId);
  if(!r)return;
+
  resetForm();
- editing=id;
+ editing=recordId;
  setKind(r.kind);
+
  el("amount").value=(r.cents/100).toFixed(2);
  el("category").value=r.category;
  el("date").value=r.date;
  el("note").value=r.note;
- el("formTitle").textContent="编辑账单";
+ accountOptions(r.accountId||"");
+
+ el("formTitle").textContent="编辑收支";
  el("deleteBtn").hidden=false;
- page("add");
+ showPage("add");
 }
 
 el("entryForm").onsubmit=e=>{
  e.preventDefault();
- const raw=el("amount").value.trim();
- if(!/^\d+(\.\d{1,2})?$/.test(raw)){
-  alert("请输入最多两位小数的金额");
+
+ const cents=parseMoney(el("amount").value);
+ if(cents===null)return alert("请输入正确金额");
+
+ const accountId=el("accountSelect").value;
+
+ if(!destinations().some(a=>a.id===accountId)){
+  alert("请先建立资产账户，并选择资金归属账户");
   return;
  }
- const parts=raw.split(".");
- const cents=Number(parts[0])*100+
-  Number((parts[1]||"").padEnd(2,"0"));
- if(!Number.isSafeInteger(cents)||cents<=0||cents>99999999900){
-  alert("金额不正确");
-  return;
- }
+
  const date=el("date").value;
  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){
-  alert("请选择有效日期");
-  return;
+  alert("日期无效");return;
  }
- const old=records.slice();
+
+ const old=structuredClone(records);
  const existing=records.find(r=>r.id===editing);
+
  const r={
-  id:editing||crypto.randomUUID(),
-  kind,cents,category:el("category").value,
-  date,note:el("note").value.trim(),
+  id:editing||id(),
+  kind,
+  cents,
+  category:el("category").value,
+  accountId,
+  date,
+  note:el("note").value.trim(),
   created:existing?.created||Date.now()
  };
- if(editing)records=records.map(x=>x.id===editing?r:x);
- else records.push(r);
+
+ if(editing){
+  records=records.map(x=>x.id===editing?r:x);
+ }else{
+  records.push(r);
+ }
+
  if(!persist()){records=old;return}
- month=new Date(Number(date.slice(0,4)),
-  Number(date.slice(5,7))-1,1);
+
+ month=new Date(
+  Number(date.slice(0,4)),
+  Number(date.slice(5,7))-1,1
+ );
+
  resetForm();
- page("home");
+ showPage("home");
 };
 
 function deleteRecord(){
- if(!editing||!confirm("确定删除这笔账单吗？"))return;
- const old=records.slice();
+ if(!editing||!confirm("删除这笔账单吗？"))return;
+
+ const old=structuredClone(records);
  records=records.filter(r=>r.id!==editing);
  if(!persist()){records=old;return}
+
  resetForm();
- page("records");
+ showPage("records");
 }
+
+function makeEntry(r){
+ const row=document.createElement("div");
+ row.className="entry";
+
+ const emoji=document.createElement("div");
+ emoji.className="emoji";
+ emoji.textContent=
+  categories[r.kind].find(x=>x[0]===r.category)?.[1]||"💳";
+
+ const info=document.createElement("div");
+ info.className="entryinfo";
+
+ const title=document.createElement("strong");
+ title.textContent=r.category;
+
+ const detail=document.createElement("small");
+ detail.textContent=
+  r.date+" · "+accountName(r.accountId)+" · "+r.note;
+
+ info.append(title,detail);
+
+ const amount=document.createElement("div");
+ amount.className="money "+r.kind;
+ amount.textContent=(r.kind==="income"?"+":"−")+money(r.cents);
+
+ row.append(emoji,info,amount);
+ row.onclick=()=>editRecord(r.id);
+ return row;
+}
+
+function showRecords(targetId,items){
+ const parent=el(targetId);
+ parent.replaceChildren();
+
+ if(!items.length){
+  const empty=document.createElement("div");
+  empty.className="empty";
+  empty.textContent="暂无收支记录";
+  parent.append(empty);
+  return;
+ }
+
+ items.forEach(r=>parent.append(makeEntry(r)));
+}
+
+function renderRecords(){
+ const prefix=month.getFullYear()+"-"+
+  String(month.getMonth()+1).padStart(2,"0");
+
+ const items=records.filter(r=>r.date.startsWith(prefix))
+  .sort((a,b)=>b.date.localeCompare(a.date)||
+   (b.created||0)-(a.created||0));
+
+ const income=sum(items,"income");
+ const expense=sum(items,"expense");
+
+ el("homeIncome").textContent=money(income);
+ el("homeExpense").textContent=money(expense);
+ el("statIncome").textContent=money(income);
+ el("statExpense").textContent=money(expense);
+ el("listMonth").textContent=
+  month.getFullYear()+"年"+(month.getMonth()+1)+"月";
+
+ showRecords("recent",items.slice(0,5));
+ showRecords("allRecords",items);
+
+ const groups=new Map();
+ items.filter(r=>r.kind==="expense").forEach(r=>{
+  groups.set(r.category,(groups.get(r.category)||0)+r.cents);
+ });
+
+ const target=el("breakdown");
+ target.replaceChildren();
+
+ if(!expense){
+  target.textContent="本月暂无支出记录";
+  return;
+ }
+
+ [...groups].sort((a,b)=>b[1]-a[1]).forEach(([name,value])=>{
+  const row=document.createElement("div");
+  row.className="stat";
+
+  const label=document.createElement("div");
+  const percent=value/expense*100;
+  label.textContent=
+   name+" · "+money(value)+" · "+percent.toFixed(1)+"%";
+
+  const bar=document.createElement("div");
+  bar.className="bar";
+
+  const fill=document.createElement("div");
+  fill.style.width=percent+"%";
+
+  bar.append(fill);
+  row.append(label,bar);
+  target.append(row);
+ });
+}
+
+function moveMonth(delta){
+ month.setMonth(month.getMonth()+delta);
+ render();
+}
+
+function render(){
+ el("totalAssets").textContent=money(totalBalance());
+ renderAssets();
+ renderDonut();
+ renderRecords();
+ accountOptions(el("accountSelect").value);
+}
+
+// ========================================
+// 导入、导出与备份
+// ========================================
 
 function download(name,type,content){
  const url=URL.createObjectURL(new Blob([content],{type}));
  const a=document.createElement("a");
- a.href=url;a.download=name;
- document.body.append(a);a.click();a.remove();
+ a.href=url;
+ a.download=name;
+ document.body.append(a);
+ a.click();
+ a.remove();
  setTimeout(()=>URL.revokeObjectURL(url),10000);
 }
 
 function exportJSON(){
- download("记账备份-"+today()+".json","application/json",
- JSON.stringify({
-  version:1,exportDate:new Date().toISOString(),records
- },null,2));
+ download(
+  "资产账本V13-"+today()+".json",
+  "application/json;charset=utf-8",
+  JSON.stringify({
+   version:2,
+   exportDate:new Date().toISOString(),
+   records,accounts
+  },null,2)
+ );
 }
 
 function exportCSV(){
- const quote=v=>'"'+String(v).replace(/"/g,'""')+'"';
+ const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
  const rows=[
-  ["日期","类型","分类","金额","备注"],
+  ["日期","类型","分类","账户","金额","备注"],
   ...records.map(r=>[
-   r.date,r.kind==="income"?"收入":"支出",
-   r.category,(r.cents/100).toFixed(2),r.note
+   r.date,
+   r.kind==="income"?"收入":"支出",
+   r.category,
+   accountName(r.accountId),
+   (r.cents/100).toFixed(2),
+   r.note
   ])
  ];
- download("记账明细-"+today()+".csv",
- "text/csv;charset=utf-8",
- "\ufeff"+rows.map(r=>r.map(quote).join(",")).join("\r\n"));
+ download(
+  "收支明细-"+today()+".csv",
+  "text/csv;charset=utf-8",
+  "\ufeff"+rows.map(r=>r.map(q).join(",")).join("\r\n")
+ );
 }
 
 async function importJSON(e){
  const file=e.target.files[0];
  e.target.value="";
  if(!file)return;
+
  try{
-  const data=JSON.parse(await file.text());
-  if(!Array.isArray(data.records)||
-   data.records.length>10000||
-   !data.records.every(validRecord))throw Error("格式错误");
-  if(!confirm("导入将替换本机账本。请确认已经备份。"))return;
-  const old=records;
-  records=data.records;
-  if(!persist()){records=old;return}
+  const obj=JSON.parse(await file.text());
+
+  if(!Array.isArray(obj.records)||
+     !obj.records.every(validRecord)||
+     !Array.isArray(obj.accounts||[])||
+     !(obj.accounts||[]).every(validAccount)){
+    throw Error("备份格式不正确");
+  }
+
+  if(!confirm("导入将替换本机的全部收支和资产目录。请先做好备份。")){
+   return;
+  }
+
+  const oldRecords=records;
+  const oldAccounts=accounts;
+
+  records=obj.records;
+  accounts=obj.accounts||[];
+
+  if(!persist()){
+   records=oldRecords;
+   accounts=oldAccounts;
+   return;
+  }
+
   render();
   alert("导入成功");
- }catch(err){alert("导入失败："+err.message)}
+
+ }catch(err){
+  alert("导入失败："+err.message);
+ }
 }
 
 function clearAll(){
- if(!confirm("确定清空本机账单吗？"))return;
- if(!confirm("请确认已经备份。继续？"))return;
- const old=records;
+ if(!confirm("确定清空本机收支和资产吗？"))return;
+ if(!confirm("请确认已导出完整 JSON 备份。继续？"))return;
+
+ const oldRecords=records;
+ const oldAccounts=accounts;
+
  records=[];
- if(!persist()){records=old;return}
+ accounts=[];
+
+ if(!persist()){
+  records=oldRecords;
+  accounts=oldAccounts;
+  return;
+ }
  render();
 }
 
 // ========================================
-// 云端同步
+// GitHub V1.3 云同步
 // ========================================
 
 let cloudPassword="";
@@ -506,27 +1265,30 @@ let cloudBusy=false;
 let cloudConflict=false;
 let remoteLedger=null;
 let cloudTimer=null;
+
 let cloudMeta={sha:null,snapshot:null};
 
 try{
- const meta=JSON.parse(localStorage.getItem(META_KEY)||"null");
- if(meta&&typeof meta==="object")cloudMeta=meta;
+ const m=JSON.parse(localStorage.getItem(META_KEY)||"null");
+ if(m&&typeof m==="object")cloudMeta=m;
 }catch(e){}
 
-function snapshot(){return JSON.stringify(records)}
+function snapshot(){
+ return JSON.stringify({records,accounts});
+}
 
 function saveMeta(){
  try{
   localStorage.setItem(META_KEY,JSON.stringify(cloudMeta));
  }catch(e){
-  console.warn("保存同步信息失败",e);
+  console.warn("同步状态保存失败",e);
  }
 }
 
-function status(message){
- el("cloudStatus").textContent=message;
+function status(text){
+ el("cloudStatus").textContent=text;
  el("homeCloudStatus").textContent=
-  (navigator.onLine?"☁️ ":"📴 ")+message;
+  (navigator.onLine?"☁️ ":"📴 ")+text;
 }
 
 function controls(first){
@@ -542,7 +1304,7 @@ function rememberPreference(){
    localStorage.removeItem(PASSWORD_KEY);
   }
  }catch(e){
-  status("当前设备无法保存自动连接设置");
+  console.warn("自动登录配置保存失败",e);
  }
 }
 
@@ -555,12 +1317,13 @@ function forgetPassword(){
  clearTimeout(cloudTimer);
  controls(false);
  el("syncBtn").hidden=true;
- status("已清除保存的密码，云同步已断开；本机账单保留");
+ status("已清除密码并断开自动同步，本机数据保留");
 }
 
 async function cloudRequest(method,body){
  const controller=new AbortController();
  const timer=setTimeout(()=>controller.abort(),20000);
+
  try{
   const response=await fetch(CLOUD_URL,{
    method,
@@ -573,10 +1336,14 @@ async function cloudRequest(method,body){
    },
    ...(body===undefined?{}:{body:JSON.stringify(body)})
   });
+
   let result={};
   try{result=await response.json()}catch(e){}
+
   if(!response.ok){
-   const error=new Error(result.error||("HTTP "+response.status));
+   const error=new Error(
+    result.error||("HTTP "+response.status)
+   );
    error.status=response.status;
    throw error;
   }
@@ -586,179 +1353,287 @@ async function cloudRequest(method,body){
  }
 }
 
-function cloudError(error){
- if(error.status===409){
+function cloudError(err){
+ if(err.status===409){
   cloudConflict=true;
-  status("⚠️ 版本冲突，自动同步暂停。请备份并检查云端。");
- }else if(error.status===401){
+  status("⚠️ 云端版本冲突，自动同步已暂停。请先备份并重新检查云端。");
+ }else if(err.status===401){
   cloudConnected=false;
   localStorage.removeItem(PASSWORD_KEY);
-  status("密码错误，已清除自动登录凭据");
+  status("同步密码错误，已清除自动登录信息");
  }else{
-  status("⚠️ 云同步失败，本地账单保留："+error.message);
+  status("⚠️ 同步失败，本机数据仍保留："+err.message);
  }
 }
 
 async function connectCloud(){
  if(cloudBusy)return;
+
  const password=el("cloudPassword").value;
- if(!password){
-  alert("请输入同步密码");
-  return;
- }
+ if(!password)return alert("请输入同步密码");
+
  cloudPassword=password;
  cloudBusy=true;
  cloudConnected=false;
  cloudConflict=false;
- status("正在连接 GitHub…");
+
+ status("正在读取云端账本…");
+
  try{
   remoteLedger=await cloudRequest("GET");
-  if(!Array.isArray(remoteLedger.records)||!("sha" in remoteLedger)){
-   throw Error("云端数据格式错误");
+
+  if(!Array.isArray(remoteLedger.records)||
+     !Array.isArray(remoteLedger.accounts)){
+   throw Error("请先升级 Cloudflare Worker 到 V1.3");
   }
+
   cloudConnected=true;
   rememberPreference();
-  if(cloudMeta.snapshot===null||
-   cloudMeta.snapshot===undefined){
+
+  if(cloudMeta.snapshot===null){
    controls(true);
-   status("✅ 云端 "+remoteLedger.records.length+
-    " 笔，本机 "+records.length+
-    " 笔。请选择首次同步方式。");
+   status(
+    "✅ 云端："+remoteLedger.records.length+
+    " 笔收支、"+remoteLedger.accounts.length+
+    " 个账户；本机："+records.length+
+    " 笔收支、"+accounts.length+
+    " 个账户。请选择首次同步方式。"
+   );
   }else{
    controls(false);
-   status("✅ 已连接，正在检查账单差异");
+   status("✅ 已连接，正在核对云端数据");
   }
+
  }catch(e){
   cloudError(e);
  }finally{
   cloudBusy=false;
  }
- if(cloudConnected&&cloudMeta.snapshot!==null&&
-  cloudMeta.snapshot!==undefined){
+
+ if(cloudConnected&&cloudMeta.snapshot!==null){
   syncCloud();
  }
 }
 
 async function uploadWithSha(sha){
  const copy=snapshot();
+ const data=JSON.parse(copy);
+
  const result=await cloudRequest("PUT",{
-  records:JSON.parse(copy),sha
+  sha,
+  records:data.records,
+  accounts:data.accounts
  });
+
  if(!result.ok||!result.sha){
-  throw Error("GitHub 未确认保存成功");
+  throw Error("云端没有确认写入成功");
  }
+
  cloudMeta={sha:result.sha,snapshot:copy};
  saveMeta();
+
  remoteLedger={
-  sha:result.sha,records:JSON.parse(copy)
+  sha:result.sha,
+  records:data.records,
+  accounts:data.accounts
  };
- status("✅ 已同步到 GitHub · "+
+
+ status("✅ 收支与资产已同步到 GitHub · "+
   new Date().toLocaleTimeString("zh-CN"));
- if(snapshot()!==copy)queueCloudSync();
+
+ if(snapshot()!==copy)queueSync();
 }
 
 async function uploadFirst(){
  if(!cloudConnected||cloudBusy||!remoteLedger)return;
+
  if(!confirm(
-  "将本机 "+records.length+" 笔账单上传，覆盖云端 "+
-  remoteLedger.records.length+" 笔账单？请先备份。"
+  "上传本机的全部收支和资产，将覆盖云端当前账本。"+
+  "请确认云端旧数据已有备份。"
  ))return;
+
  cloudBusy=true;
- status("正在上传账单…");
+ status("正在上传完整账本…");
+
  try{
-  await uploadWithSha(remoteLedger.sha);
+  const latest=await cloudRequest("GET");
+  if(latest.sha!==remoteLedger.sha){
+   throw Object.assign(new Error("云端版本已变化"),{status:409});
+  }
+
+  await uploadWithSha(latest.sha);
   controls(false);
+
  }catch(e){cloudError(e)}
  finally{cloudBusy=false}
 }
 
 async function restoreCloud(){
  if(!cloudConnected||cloudBusy)return;
+
  if(!confirm(
-  "云端数据将替换本机全部账单，请先导出本机备份。继续？"
+  "云端收支和资产目录将完整替换本机数据。"+
+  "请先导出本机 JSON 备份。继续？"
  ))return;
+
  cloudBusy=true;
+
  try{
   const latest=await cloudRequest("GET");
-  const old=records;
+  if(!latest.records.every(validRecord)||
+     !latest.accounts.every(validAccount)){
+   throw Error("云端数据校验失败");
+  }
+
+  const oldRecords=records;
+  const oldAccounts=accounts;
+
   records=latest.records;
-  if(!persist()){records=old;return}
+  accounts=latest.accounts;
+
+  if(!persist()){
+   records=oldRecords;
+   accounts=oldAccounts;
+   return;
+  }
+
   cloudMeta={
    sha:latest.sha,
    snapshot:snapshot()
   };
   saveMeta();
+
   remoteLedger=latest;
-  render();
   controls(false);
-  status("✅ 已从云端恢复 "+records.length+" 笔账单");
+  render();
+
+  status("✅ 已恢复云端完整账本");
+
  }catch(e){cloudError(e)}
  finally{cloudBusy=false}
 }
 
 async function mergeCloud(){
  if(!cloudConnected||cloudBusy)return;
+
  if(!confirm(
-  "合并时相同 ID 保留本机版本，已删除账单可能重新出现。" +
-  "请确认已经备份双方数据。继续？"
+  "此操作按 ID 合并收支与账户，重复 ID 优先本机数据。"+
+  "删除过的旧记录可能重新出现。"+
+  "请先备份双方数据。继续？"
  ))return;
+
  cloudBusy=true;
+
  try{
   const latest=await cloudRequest("GET");
-  const map=new Map(latest.records.map(r=>[r.id,r]));
-  records.forEach(r=>map.set(r.id,r));
-  const old=records;
-  records=[...map.values()];
-  if(!persist()){records=old;return}
+  const accountMap=new Map(
+   latest.accounts.map(a=>[a.id,a])
+  );
+
+  accounts.forEach(a=>accountMap.set(a.id,a));
+
+  const recordMap=new Map(
+   latest.records.map(r=>[r.id,r])
+  );
+  records.forEach(r=>recordMap.set(r.id,r));
+
+  const newAccounts=[...accountMap.values()];
+  const newRecords=[...recordMap.values()];
+
+  const validIds=new Set();
+  newAccounts.forEach(a=>{
+   if(a.children.length){
+    a.children.forEach(c=>validIds.add(c.id));
+   }else{
+    validIds.add(a.id);
+   }
+  });
+
+  if(newRecords.some(r=>r.accountId&&!validIds.has(r.accountId))){
+   throw Error("合并后存在找不到账户的收支记录，请先手动处理");
+  }
+
+  const oldRecords=records;
+  const oldAccounts=accounts;
+
+  records=newRecords;
+  accounts=newAccounts;
+
+  if(!persist()){
+   records=oldRecords;
+   accounts=oldAccounts;
+   return;
+  }
+
   await uploadWithSha(latest.sha);
-  controls(false);
   cloudConflict=false;
+  controls(false);
   render();
+
  }catch(e){cloudError(e)}
  finally{cloudBusy=false}
 }
 
-function queueCloudSync(){
+function queueSync(){
  if(!cloudConnected||cloudConflict)return;
+
  clearTimeout(cloudTimer);
+
  cloudTimer=setTimeout(()=>{
-  if(cloudBusy)queueCloudSync();
-  else syncCloud();
- },900);
+  if(cloudBusy){
+   queueSync();
+  }else{
+   syncCloud();
+  }
+ },1000);
 }
 
 async function syncCloud(){
  if(!cloudConnected||cloudBusy||cloudConflict)return;
 
- if(cloudMeta.snapshot===null||
-    cloudMeta.snapshot===undefined){
+ if(cloudMeta.snapshot===null){
   controls(true);
-  status("请选择首次同步方式");
+  status("请先选择首次上传或恢复");
+  return;
+ }
+
+ if(!navigator.onLine){
+  status("📴 当前离线，本机账单待同步");
   return;
  }
 
  cloudBusy=true;
- status(navigator.onLine?
-  "正在检查云端…":"📴 离线，账单保存在本机");
+ status("正在检查 GitHub 云端更新…");
 
  try{
   const latest=await cloudRequest("GET");
-  const localChanged=snapshot()!==cloudMeta.snapshot;
-  const remoteChanged=latest.sha!==cloudMeta.sha;
+
+  const localChanged=
+   snapshot()!==cloudMeta.snapshot;
+  const remoteChanged=
+   latest.sha!==cloudMeta.sha;
 
   if(localChanged&&remoteChanged){
    cloudConflict=true;
    remoteLedger=latest;
    controls(true);
-   status("⚠️ 本机和云端都有新改动。"+
-    "已暂停自动同步，请先备份，再选择合并或恢复。");
+   status("⚠️ 本机和云端都有修改。已暂停写入，请先导出备份，再合并或恢复。");
    return;
   }
 
   if(remoteChanged){
-   const old=records;
+   const oldRecords=records;
+   const oldAccounts=accounts;
+
    records=latest.records;
-   if(!persist()){records=old;return}
+   accounts=latest.accounts;
+
+   if(!persist()){
+    records=oldRecords;
+    accounts=oldAccounts;
+    return;
+   }
+
    cloudMeta={
     sha:latest.sha,
     snapshot:snapshot()
@@ -766,14 +1641,17 @@ async function syncCloud(){
    saveMeta();
    remoteLedger=latest;
    render();
-   status("✅ 已从 GitHub 更新 "+
-    records.length+" 笔账单");
+
+   status("✅ 已从云端更新完整账本");
+
   }else if(localChanged){
    await uploadWithSha(latest.sha);
+
   }else{
    status("✅ 本机与 GitHub 已同步 · "+
     new Date().toLocaleTimeString("zh-CN"));
   }
+
  }catch(e){
   cloudError(e);
  }finally{
@@ -781,36 +1659,39 @@ async function syncCloud(){
  }
 }
 
-// 联网后重试
 window.addEventListener("online",()=>{
  if(cloudConnected)syncCloud();
  else if(localStorage.getItem(PASSWORD_KEY))connectCloud();
 });
 
 window.addEventListener("offline",()=>{
- status("📴 当前离线，账单保存在本机，联网后继续同步");
+ status("📴 离线 · 数据已保存在手机，等待联网");
 });
 
-// 从后台切回软件时检查
 document.addEventListener("visibilitychange",()=>{
  if(!document.hidden&&cloudConnected)syncCloud();
 });
 
-// 初始化
+// 启动
 resetForm();
 render();
 
-// 可选自动连接
+// 自动恢复登录
 try{
  const password=localStorage.getItem(PASSWORD_KEY);
+
  if(password){
   el("cloudPassword").value=password;
   el("rememberCloud").checked=true;
-  if(navigator.onLine)connectCloud();
-  else status("📴 当前离线，账单待同步");
+
+  if(navigator.onLine){
+   connectCloud();
+  }else{
+   status("📴 当前离线，本地账本正常");
+  }
  }
 }catch(e){
- console.warn("无法恢复自动连接配置",e);
+ console.warn("自动连接配置不可用",e);
 }
 </script>
 </body>
